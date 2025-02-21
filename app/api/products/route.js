@@ -24,45 +24,33 @@ async function verifyAuth() {
 export async function GET(request) {
   try {
     await connectDB();
-
     const { searchParams } = new URL(request.url);
-    const brandId = searchParams.get('brand');
+    const brand = searchParams.get('brand');
     const query = searchParams.get('query');
     const sort = searchParams.get('sort') || 'newest';
+    const page = parseInt(searchParams.get('page')) || 1;
+    const limit = parseInt(searchParams.get('limit')) || 20;
+    const skip = (page - 1) * limit;
 
     let filter = {};
-    if (brandId) filter.brandId = brandId;
-    if (query) {
-      filter.$or = [
-        { name: { $regex: query, $options: 'i' } },
-        { description: { $regex: query, $options: 'i' } },
-      ];
-    }
+    if (brand) filter.brandId = brand;
+    if (query) filter.name = { $regex: query, $options: 'i' };
 
-    let sortOptions = {};
-    switch (sort) {
-      case 'oldest':
-        sortOptions = { createdAt: 1 };
-        break;
-      case 'price-low':
-        sortOptions = { price: 1 };
-        break;
-      case 'price-high':
-        sortOptions = { price: -1 };
-        break;
-      default:
-        sortOptions = { createdAt: -1 };
-    }
+    const sortOptions = {
+      newest: { createdAt: -1 },
+      oldest: { createdAt: 1 },
+    };
 
     const products = await Product.find(filter)
-      .sort(sortOptions)
+      .sort(sortOptions[sort])
+      .skip(skip)
+      .limit(limit)
       .populate('brandId', 'name logo');
 
     return NextResponse.json(products);
   } catch (error) {
-    console.error('Error fetching products:', error);
     return NextResponse.json(
-      { message: 'אירעה שגיאה בטעינת המוצרים' },
+      { error: 'אירעה שגיאה בטעינת המוצרים' },
       { status: 500 }
     );
   }

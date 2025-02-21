@@ -6,15 +6,16 @@ import { Heart, ArrowRight, Edit } from 'lucide-react';
 import Product from '@/models/Product';
 import connectDB from '@/lib/db';
 
-async function getProduct(id) {
+// async function getProduct(id) {
+//   await connectDB();
+//   return product;
+// }
+
+export default async function ProductPage({ params }) {
+  // const id = use(params).id;
+  const {id} = await params;
   await connectDB();
   const product = await Product.findById(id).populate('brandId', 'name logo');
-  return product;
-}
-
-export default function ProductPage({ params }) {
-  const id = use(params).id;
-  const product = use(getProduct(id));
 
   if (!product) {
     return <div>המוצר לא נמצא</div>;

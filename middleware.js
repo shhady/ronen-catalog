@@ -6,6 +6,7 @@ export async function middleware(request) {
   const publicRoutes = [
     '/',
     '/shop',
+    '/about',
     '/product/(.*)',
     '/sign-in',
     '/sign-up',
