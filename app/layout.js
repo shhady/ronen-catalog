@@ -1,14 +1,13 @@
-// import { Providers } from './providers';
-import { Suspense } from 'react';
 import { Rubik } from 'next/font/google';
-import './globals.css';
+import { Providers } from './providers';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import WhatsAppButton from './components/WhatsAppButton';
+import ScrollToTop from './components/ScrollToTop';
+import './globals.css';
 
 const rubik = Rubik({
   subsets: ['hebrew'],
-  weight: ['400', '500', '700'],
+  weights: ['400', '500', '700'],
   display: 'swap',
   preload: true,
 });
@@ -21,17 +20,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="he" dir="rtl">
-      <body className={`${rubik.className} bg-white text-gray-900 flex flex-col min-h-screen`}>
-        {/* <Providers> */}
-        <Suspense fallback={<div>Loading...</div>}>
+      <body className={rubik.className}>
+        <Providers>
+          <ScrollToTop />
           <Navbar />
-          <main className="mt-16 flex-grow">
+          <main className="pt-16">
             {children}
           </main>
           <Footer />
-          <WhatsAppButton />
-        </Suspense>
-        {/* </Providers> */}
+        </Providers>
       </body>
     </html>
   );
