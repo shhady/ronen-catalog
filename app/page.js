@@ -18,8 +18,10 @@ export default async function HomePage() {
             src="/hero.png"
             alt="Hero Background"
             fill
-            className="object-cover"
+            sizes="100vw"
             priority
+            className="object-cover"
+            quality={85}
           />
           <div className="absolute inset-0 bg-black/40" />
         </div>
@@ -31,7 +33,7 @@ export default async function HomePage() {
             גלו את המגוון הרחב של המוצרים האיכותיים שלנו
           </p>
           <Link href="/shop">
-            <Button size="lg" className="text-lg bg-white text-black">
+            <Button size="lg" className="text-lg bg-white text-black hover:bg-gray-100">
               לצפייה בקטלוג
             </Button>
           </Link>

@@ -160,14 +160,14 @@ export default function Navbar() {
             href="/" 
             className="flex items-center space-x-2 hover:opacity-90 transition-opacity"
           >
-            <Image
+            {/* <Image
               src="/logo.png"
               alt="Logo"
               width={40}
               height={40}
               className="object-contain"
-            />
-            {/* <span className="text-xl font-bold text-gray-900 mr-2">רונן קטלוג</span> */}
+            /> */}
+            <span className="text-xl font-bold text-gray-900 mr-2">רונן קטלוג</span>
           </Link>
 
           {/* Desktop Navigation */}
