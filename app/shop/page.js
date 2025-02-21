@@ -190,11 +190,11 @@ export default function ShopPage() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {products.map((product) => (
-              <div
-                key={product._id}
-                className="bg-white rounded-lg shadow overflow-hidden"
+               <Link href={`/product/${product._id}`} key={product._id}> <div
+                
+                className="bg-white rounded-lg shadow border border-gray-400 overflow-hidden"
               >
-                <Link href={`/product/${product._id}`}>
+              
                   <div className="relative h-48">
                     {product.imageUrl && (
                       <Image
@@ -205,7 +205,7 @@ export default function ShopPage() {
                       />
                     )}
                   </div>
-                </Link>
+                
                 <div className="p-4">
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="text-lg font-semibold">{product.name}</h3>
@@ -228,7 +228,9 @@ export default function ShopPage() {
                     </p>
                   )}
                 </div>
+             
               </div>
+              </Link>
             ))}
           </div>
 
