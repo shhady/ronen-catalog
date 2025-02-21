@@ -10,9 +10,20 @@ import { Heart, Search, Filter, X } from 'lucide-react';
 export default function ShopClient({ initialProducts }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [products, setProducts] = useState(initialProducts);
+  const initialBrand = searchParams.get('brand');
+  const initialQuery = searchParams.get('query');
+  const initialSort = searchParams.get('sort');
+  
+  // Set initial loading state to true if there are URL filters
+  const [loading, setLoading] = useState(
+    !!(initialBrand || initialQuery || (initialSort && initialSort !== 'newest'))
+  );
+  const [products, setProducts] = useState(
+    !!(initialBrand || initialQuery || (initialSort && initialSort !== 'newest'))
+      ? []
+      : initialProducts
+  );
   const [brands, setBrands] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [filters, setFilters] = useState({
     brand: searchParams.get('brand') || '',
@@ -38,10 +49,6 @@ export default function ShopClient({ initialProducts }) {
   }, [loading, hasMore]);
 
   useEffect(() => {
-    const initialBrand = searchParams.get('brand');
-    const initialQuery = searchParams.get('query');
-    const initialSort = searchParams.get('sort');
-
     // If there are initial filters, fetch filtered products
     if (initialBrand || initialQuery || (initialSort && initialSort !== 'newest')) {
       setLoading(true);
