@@ -1,5 +1,6 @@
 import dbConnect from './db';
 import Brand from '../models/Brand';
+export const dynamic = 'force-dynamic';
 
 export async function getBrands() {
   try {
