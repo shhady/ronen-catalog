@@ -190,11 +190,11 @@ export default function ShopPage() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {products.map((product) => (
-               <Link href={`/product/${product._id}`} key={product._id}> <div
-                
+                <div
+                key={product._id}
                 className="bg-white rounded-lg shadow border border-gray-400 overflow-hidden"
               >
-              
+              <Link href={`/product/${product._id}`} >
                   <div className="relative h-48">
                     {product.imageUrl && (
                       <Image
@@ -205,13 +205,26 @@ export default function ShopPage() {
                       />
                     )}
                   </div>
-                
-                <div className="p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-lg font-semibold">{product.name}</h3>
-                    <button
-                      onClick={() => toggleFavorite(product._id)}
+                  </Link>
+                <div className="flex justify-between items-start p-4">
+                  <div className="flex-col justify-between w-full items-start mb-2">
+                  <Link href={`/product/${product._id}`} >
+                  <h3 className="text-lg font-semibold w-full">{product.name}</h3>
+                  {product.brandId && (
+                    <p className="text-sm text-gray-600">
+                      {product.brandId.name}
+                    </p>
+                  )}
+                    </Link>
+                  
+                  </div>
+                  <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleFavorite(product._id);
+                      }}
                       className="text-gray-500 hover:text-red-500"
+                     
                     >
                       <Heart
                         className={`w-5 h-5 ${
@@ -221,16 +234,10 @@ export default function ShopPage() {
                         }`}
                       />
                     </button>
-                  </div>
-                  {product.brandId && (
-                    <p className="text-sm text-gray-600">
-                      {product.brandId.name}
-                    </p>
-                  )}
                 </div>
-             
+               
               </div>
-              </Link>
+              
             ))}
           </div>
 
