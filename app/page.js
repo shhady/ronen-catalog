@@ -98,7 +98,7 @@ export default async function HomePage() {
             {brands.map((brand) => (
               <Link
                 key={brand._id}
-                href={`/shop?brand=${brand._id}`}
+                href={`/shop?brand=${brand._id}&query=&sort=newest`}
                 className="block"
               >
                 <div className="bg-white rounded-lg border border-gray-500 p-4 hover:shadow-md transition-shadow">
