@@ -1,10 +1,9 @@
-import { use } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button } from '../../components/ui/button';
 import { Heart, ArrowRight, Edit } from 'lucide-react';
 import Product from '@/models/Product';
 import connectDB from '@/lib/db';
+export const revalidate = 60; // re-generate every 60 seconds
 
 // async function getProduct(id) {
 //   await connectDB();
@@ -34,12 +33,15 @@ export default async function ProductPage({ params }) {
         {/* Product Image */}
         <div className="relative h-96 bg-white rounded-lg overflow-hidden">
           {product.imageUrl ? (
-            <Image
-              src={product.imageUrl}
-              alt={product.name}
-              fill
-              className="object-contain px-4"
-            />
+           <Image
+           src={product.imageUrl}
+           alt={product.name}
+           fill
+           className="object-contain px-4"
+           placeholder="blur"
+           blurDataURL="/placeholder.png" // A small base64 placeholder
+         />
+         
           ) : (
             <div className="flex items-center justify-center h-full text-gray-400">
               אין תמונה
