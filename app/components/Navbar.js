@@ -1,28 +1,19 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Search, ChevronDown, Menu, X } from 'lucide-react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
-export default function Navbar() {
-  const router = useRouter();
-  const pathname = usePathname();
+// Separate component for search functionality
+function SearchComponent() {
   const searchParams = useSearchParams();
-  const [brands, setBrands] = useState([]);
   const [searchQuery, setSearchQuery] = useState(searchParams.get('query') || '');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
   const searchTimeoutRef = useRef(null);
-
-  useEffect(() => {
-    fetchBrands();
-    checkAuthStatus();
-  }, [pathname]);
+  const router = useRouter();
 
   useEffect(() => {
     if (searchQuery.trim() === '') {
@@ -31,15 +22,13 @@ export default function Navbar() {
       return;
     }
 
-    // Clear the previous timeout
     if (searchTimeoutRef.current) {
       clearTimeout(searchTimeoutRef.current);
     }
 
-    // Set a new timeout to fetch search results
     searchTimeoutRef.current = setTimeout(() => {
       fetchSearchResults();
-    }, 300); // Debounce time of 300ms
+    }, 300);
 
     return () => {
       if (searchTimeoutRef.current) {
@@ -47,6 +36,97 @@ export default function Navbar() {
       }
     };
   }, [searchQuery]);
+
+  const fetchSearchResults = async () => {
+    try {
+      const res = await fetch(`/api/products?query=${encodeURIComponent(searchQuery)}`);
+      const data = await res.json();
+      setSearchResults(data);
+      setShowSearchDropdown(true);
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/shop?query=${encodeURIComponent(searchQuery)}`);
+      setShowSearchDropdown(false);
+    }
+  };
+
+  const handleProductClick = (productId) => {
+    router.push(`/product/${productId}`);
+    setSearchQuery('');
+    setShowSearchDropdown(false);
+  };
+
+  return (
+    <div className="relative max-w-md w-full mx-4">
+      <form onSubmit={handleSearch}>
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="חיפוש מוצרים..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+          />
+          <button
+            type="submit"
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <Search className="w-5 h-5" />
+          </button>
+        </div>
+      </form>
+
+      {showSearchDropdown && searchResults.length > 0 && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden z-50 max-h-96 overflow-y-auto">
+          {searchResults.map((product) => (
+            <div
+              key={product._id}
+              onClick={() => handleProductClick(product._id)}
+              className="flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0"
+            >
+              {product.imageUrl && (
+                <div className="relative w-12 h-12 mr-3">
+                  <Image
+                    src={product.imageUrl}
+                    alt={product.name}
+                    fill
+                    className="object-contain rounded"
+                  />
+                </div>
+              )}
+              <div>
+                <div className="text-gray-900 font-medium">{product.name}</div>
+                {product.brandId && (
+                  <div className="text-gray-500 text-sm">{product.brandId.name}</div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function Navbar() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [brands, setBrands] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    fetchBrands();
+    checkAuthStatus();
+  }, [pathname]);
 
   const checkAuthStatus = async () => {
     try {
@@ -69,37 +149,6 @@ export default function Navbar() {
     } catch (error) {
       console.error('Error fetching brands:', error);
     }
-  };
-
-  const fetchSearchResults = async () => {
-    try {
-      const res = await fetch(`/api/products?query=${encodeURIComponent(searchQuery)}`);
-      const data = await res.json();
-      setSearchResults(data);
-      setShowSearchDropdown(true);
-    } catch (error) {
-      console.error('Error fetching search results:', error);
-    }
-  };
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/shop?query=${encodeURIComponent(searchQuery)}`);
-      setShowSearchDropdown(false);
-      setIsMobileMenuOpen(false);
-    }
-  };
-
-  const handleSearchInputChange = (e) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-  };
-
-  const handleProductClick = (productId) => {
-    router.push(`/product/${productId}`);
-    setSearchQuery('');
-    setShowSearchDropdown(false);
   };
 
   return (
@@ -178,56 +227,10 @@ export default function Navbar() {
               
             </div>
 
-            {/* Search Bar */}
-            <div className="relative max-w-md w-full mx-4">
-              <form onSubmit={handleSearch}>
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="חיפוש מוצרים..."
-                    value={searchQuery}
-                    onChange={handleSearchInputChange}
-                    className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-                  />
-                  <button
-                    type="submit"
-                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                  >
-                    <Search className="w-5 h-5" />
-                  </button>
-                </div>
-              </form>
-
-              {/* Search Results Dropdown */}
-              {showSearchDropdown && searchResults.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden z-50 max-h-96 overflow-y-auto">
-                  {searchResults.map((product) => (
-                    <div
-                      key={product._id}
-                      onClick={() => handleProductClick(product._id)}
-                      className="flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0"
-                    >
-                      {product.imageUrl && (
-                        <div className="relative w-12 h-12 mr-3">
-                          <Image
-                            src={product.imageUrl}
-                            alt={product.name}
-                            fill
-                            className="object-contain rounded"
-                          />
-                        </div>
-                      )}
-                      <div>
-                        <div className="text-gray-900 font-medium">{product.name}</div>
-                        {product.brandId && (
-                          <div className="text-gray-500 text-sm">{product.brandId.name}</div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            {/* Search Component wrapped in Suspense */}
+            <Suspense fallback={<div className="w-full max-w-md h-10 bg-gray-100 rounded-lg animate-pulse" />}>
+              <SearchComponent />
+            </Suspense>
           </div>
 
           {/* Mobile Menu Button */}

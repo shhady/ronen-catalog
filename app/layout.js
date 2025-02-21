@@ -1,4 +1,5 @@
 // import { Providers } from './providers';
+import { Suspense } from 'react';
 import { Rubik } from 'next/font/google';
 import './globals.css';
 import Navbar from './components/Navbar';
@@ -22,12 +23,14 @@ export default function RootLayout({ children }) {
     <html lang="he" dir="rtl">
       <body className={`${rubik.className} bg-white text-gray-900 flex flex-col min-h-screen`}>
         {/* <Providers> */}
+        <Suspense fallback={<div>Loading...</div>}>
           <Navbar />
           <main className="mt-16 flex-grow">
             {children}
           </main>
           <Footer />
           <WhatsAppButton />
+        </Suspense>
         {/* </Providers> */}
       </body>
     </html>
