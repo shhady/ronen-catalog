@@ -4,10 +4,11 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Search, ChevronDown, Menu, X } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [brands, setBrands] = useState([]);
   const [searchQuery, setSearchQuery] = useState(searchParams.get('query') || '');
@@ -21,7 +22,7 @@ export default function Navbar() {
   useEffect(() => {
     fetchBrands();
     checkAuthStatus();
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (searchQuery.trim() === '') {
@@ -63,6 +64,7 @@ export default function Navbar() {
     try {
       const res = await fetch('/api/brands');
       const data = await res.json();
+      console.log(data);
       setBrands(data);
     } catch (error) {
       console.error('Error fetching brands:', error);
@@ -149,7 +151,7 @@ export default function Navbar() {
                 
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-100 overflow-hidden z-50">
-                    {brands.map((brand) => (
+                    {brands?.map((brand) => (
                       <Link
                         key={brand._id}
                         href={`/shop?brand=${brand._id}`}
@@ -324,18 +326,46 @@ export default function Navbar() {
               <div className="px-4">
                 <div className="font-medium text-gray-900 mb-3 text-lg">מותגים</div>
                 <div className="space-y-3">
-                  {brands.map((brand) => (
-                    <Link
-                      key={brand._id}
-                      href={`/shop?brand=${brand._id}`}
-                      className="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors border border-gray-100"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      
-                      <div className="font-medium text-gray-900 flex items-center gap-2"><Image src={brand.logo} alt={brand.name} width={20} height={20} className="object-contain rounded" />{brand.name}</div>
-                      <div className="text-sm text-gray-500 mt-1">{brand.description}</div>
-                    </Link>
-                  ))}
+                  {loading ? (
+                    Array(3).fill(null).map((_, i) => (
+                      <div key={i} className="py-2 px-3 border border-gray-100 rounded-lg">
+                        <div className="w-full h-6 bg-gray-200 animate-pulse rounded mb-2"></div>
+                        <div className="w-2/3 h-4 bg-gray-200 animate-pulse rounded"></div>
+                      </div>
+                    ))
+                  ) : Array.isArray(brands) && brands.length > 0 ? (
+                    brands.map((brand) => (
+                      <Link
+                        key={brand._id}
+                        href={`/shop?brand=${brand._id}`}
+                        className="block py-2 px-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors border border-gray-100"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <div className="font-medium text-gray-900 flex items-center gap-2">
+                          {brand.logo ? (
+                            <Image 
+                              src={brand.logo} 
+                              alt={brand.name} 
+                              width={20} 
+                              height={20} 
+                              className="object-contain rounded"
+                              onError={(e) => {
+                                e.currentTarget.src = '/placeholder-logo.png';
+                              }}
+                            />
+                          ) : (
+                            <div className="w-5 h-5 bg-gray-200 rounded"></div>
+                          )}
+                          {brand.name}
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">{brand.description}</div>
+                      </Link>
+                    ))
+                  ) : (
+                    <div className="text-center text-gray-500 py-4">
+                      לא נמצאו מותגים
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

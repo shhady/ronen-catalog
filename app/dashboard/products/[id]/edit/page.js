@@ -84,12 +84,28 @@ export default function EditProductPage({ params }) {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          description: formData.description,
+          brandId: formData.brandId,
+          country: formData.country,
+          imageUrl: formData.imageUrl,
+          units: formData.units,
+          weight: formData.weight,
+          weightUnit: formData.weightUnit,
+        }),
       });
 
+      let data;
+      try {
+        data = await res.json();
+      } catch (err) {
+        console.error('JSON parse error:', err);
+        throw new Error('אירעה שגיאה בעדכון המוצר');
+      }
+
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.message || 'אירעה שגיאה בעדכון המוצר');
+        throw new Error(data?.message || 'אירעה שגיאה בעדכון המוצר');
       }
 
       router.push('/dashboard/products');
@@ -322,7 +338,7 @@ export default function EditProductPage({ params }) {
             {loading ? 'שומר...' : 'עדכן מוצר'}
           </Button>
           <Link href="/dashboard/products">
-            <Button type="button" variant="outline">
+            <Button type="button" >
               ביטול
             </Button>
           </Link>

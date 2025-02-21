@@ -66,7 +66,7 @@ export default function SignUpPage() {
       }
 
       // Redirect to login page after successful signup
-      window.location.href = '/login';
+      window.location.href = '/sign-in';
     } catch (err) {
       setError(err.message);
     } finally {
@@ -92,7 +92,7 @@ export default function SignUpPage() {
           <p className="mt-2 text-center text-sm text-gray-600">
             כבר יש לך חשבון?{' '}
             <Link
-              href="/login"
+              href="/sign-in"
               className="font-medium text-blue-600 hover:text-blue-500"
             >
               התחבר כאן

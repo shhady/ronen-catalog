@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { cn } from '../lib/utils';
 import {
   LayoutDashboard,
@@ -35,10 +35,21 @@ const sidebarItems = [
 export default function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    window.location.href = '/sign-in';
+  const handleLogout = async () => {
+    try {
+      const res = await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+
+      if (res.ok) {
+        router.push('/sign-in');
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   return (
@@ -80,9 +91,7 @@ export default function DashboardLayout({ children }) {
                   </Link>
                 );
               })}
-            </nav>
-          </div>
-          <div className="p-4 border-t">
+              <div className="p-4 border-t">
             <Button
               variant="ghost"
               className="w-full justify-start gap-3 text-red-500 hover:text-red-600 hover:bg-red-50"
@@ -92,6 +101,9 @@ export default function DashboardLayout({ children }) {
               <span>התנתק</span>
             </Button>
           </div>
+            </nav>
+          </div>
+          
         </div>
       </aside>
 

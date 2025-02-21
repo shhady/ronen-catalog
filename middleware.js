@@ -13,6 +13,7 @@ export async function middleware(request) {
     '/api/auth/signup',
     '/api/products',
     '/api/products/(.*)',
+    '/api/brands',
     '/api/brands/public',
     '/favorites',
     '/_next/static/(.*)',
@@ -28,7 +29,12 @@ export async function middleware(request) {
     return request.nextUrl.pathname === route;
   });
 
-  if (isPublicRoute) {
+  // Check if it's a GET request to /api/brands
+  const isBrandsGetRequest = 
+    request.nextUrl.pathname === '/api/brands' && 
+    request.method === 'GET';
+
+  if (isPublicRoute || isBrandsGetRequest) {
     return NextResponse.next();
   }
 
