@@ -38,6 +38,22 @@ export default function ShopClient({ initialProducts }) {
   }, [loading, hasMore]);
 
   useEffect(() => {
+    const initialBrand = searchParams.get('brand');
+    const initialQuery = searchParams.get('query');
+    const initialSort = searchParams.get('sort');
+
+    // If there are initial filters, fetch filtered products
+    if (initialBrand || initialQuery || (initialSort && initialSort !== 'newest')) {
+      setLoading(true);
+      fetchProducts({
+        brand: initialBrand || '',
+        query: initialQuery || '',
+        sort: initialSort || 'newest'
+      });
+    }
+  }, []); // Empty dependency array as this should only run once on mount
+
+  useEffect(() => {
     const storedFavorites = localStorage.getItem('favorites');
     if (storedFavorites) {
       setFavorites(JSON.parse(storedFavorites));

@@ -204,7 +204,7 @@ export default function Navbar() {
                     {brands?.map((brand) => (
                       <Link
                         key={brand._id}
-                        href={`/shop?brand=${brand._id}`}
+                        href={`/shop?brand=${brand._id}&query=&sort=newest`}
                         className="block px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0"
                         onClick={() => setIsDropdownOpen(false)}
                       >
