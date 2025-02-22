@@ -15,7 +15,7 @@ export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Navigation Links */}
           <div>
             <h3 className="text-lg font-semibold mb-4 text-white">ניווט</h3>
@@ -25,11 +25,11 @@ export default function Footer() {
                   עמוד הבית
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="/about" className="hover:text-white transition-colors">
                   אודות
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link href="/shop" className="hover:text-white transition-colors">
                   מוצרים
@@ -67,14 +67,14 @@ export default function Footer() {
           </div>
 
           {/* Business Hours */}
-          <div>
+          {/* <div>
             <h3 className="text-lg font-semibold mb-4 text-white">שעות פעילות</h3>
             <ul className="space-y-2">
               <li>ראשון - חמישי: 9:00 - 18:00</li>
               <li>שישי: 9:00 - 14:00</li>
               <li>שבת: סגור</li>
             </ul>
-          </div>
+          </div> */}
 
           {/* About Short */}
           <div>
