@@ -182,7 +182,10 @@ export default function EditBrandPage({ params }) {
                     </button>
                   </div>
                 ) : (
-                  <>
+                  <label
+                    htmlFor="file-upload"
+                    className="cursor-pointer flex flex-col items-center justify-center w-full h-full px-24"
+                  >
                     <svg
                       className="mx-auto h-12 w-12 text-gray-400"
                       stroke="currentColor"
@@ -197,25 +200,20 @@ export default function EditBrandPage({ params }) {
                         strokeLinejoin="round"
                       />
                     </svg>
-                    <div className="flex text-sm text-gray-600">
-                      <label
-                        htmlFor="file-upload"
-                        className="relative cursor-pointer bg-white rounded-md font-medium text-primary hover:text-primary/90 focus-within:outline-none"
-                      >
-                        <span>העלה קובץ</span>
-                        <input
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          accept="image/*"
-                          className="sr-only"
-                          onChange={handleFileUpload}
-                        />
-                      </label>
+                    <div className="flex text-sm text-gray-600 justify-center">
+                      <span className="font-medium text-primary hover:text-primary/90">העלה קובץ</span>
                       <p className="pr-1">או גרור ושחרר</p>
                     </div>
                     <p className="text-xs text-gray-500">PNG, JPG עד 10MB</p>
-                  </>
+                    <input
+                      id="file-upload"
+                      name="file-upload"
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      onChange={handleFileUpload}
+                    />
+                  </label>
                 )}
               </div>
             </div>

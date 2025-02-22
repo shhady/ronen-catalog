@@ -7,12 +7,14 @@ import { Button } from '../components/ui/button';
 import { formatPrice } from '../lib/utils';
 import { Heart, ArrowRight } from 'lucide-react';
 import { ProductGridSkeleton } from '@/components/skeletons/ProductSkeleton';
+import { useProduct } from '@/contexts/ProductContext';
 
 export default function FavoritesPage() {
   const [favorites, setFavorites] = useState([]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const { setSelectedProduct } = useProduct();
 
   useEffect(() => {
     const storedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
@@ -26,11 +28,13 @@ export default function FavoritesPage() {
 
   const fetchFavoriteProducts = async (favoriteIds) => {
     try {
-      const promises = favoriteIds.map((id) =>
-        fetch(`/api/products/${id}`).then((res) => res.json())
-      );
+      const promises = favoriteIds.map(async (id) => {
+        const res = await fetch(`/api/products/${id}`);
+        if (!res.ok) return null;
+        return res.json();
+      });
       const products = await Promise.all(promises);
-      setProducts(products.filter((p) => p._id)); // Filter out any failed requests
+      setProducts(products.filter(Boolean)); // Filter out null responses
     } catch (error) {
       setError('אירעה שגיאה בטעינת המוצרים המועדפים');
     } finally {
@@ -81,7 +85,7 @@ export default function FavoritesPage() {
       <div className="mb-8">
         <Link href="/shop" className="flex items-center text-primary hover:underline">
           <ArrowRight className="w-4 h-4 ml-2" />
-          חזרה לחנות
+          חזרה לקטלוג
         </Link>
       </div>
 
@@ -107,7 +111,10 @@ export default function FavoritesPage() {
               key={product._id}
               className="bg-white  rounded-lg shadow overflow-hidden"
             >
-              <Link href={`/product/${product._id}`}>
+              <Link 
+                href={`/product/${product._id}`}
+                onClick={() => setSelectedProduct(product)}
+              >
                 <div className="relative h-48">
                   {product.imageUrl && (
                     <Image

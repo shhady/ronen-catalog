@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Heart, Search, Filter, X } from 'lucide-react';
+import { useProduct } from '@/contexts/ProductContext';
 
 export default function ShopClient({ initialProducts }) {
   const router = useRouter();
@@ -36,6 +37,7 @@ export default function ShopClient({ initialProducts }) {
   const [page, setPage] = useState(1);
   const observer = useRef();
   const isInitialLoad = useRef(true);
+  const { setSelectedProduct } = useProduct();
 
   const lastProductElementRef = useCallback(node => {
     if (loading) return;
@@ -306,7 +308,10 @@ export default function ShopClient({ initialProducts }) {
                 ref={index === products.length - 1 ? lastProductElementRef : null}
                 className="bg-white rounded-lg shadow border border-gray-400 overflow-hidden"
               >
-                <Link href={`/product/${product._id}`}>
+                <Link 
+                  href={`/product/${product._id}`}
+                  onClick={() => setSelectedProduct(product)}
+                >
                   <div className="relative h-48">
                     {product.imageUrl && (
                       <Image

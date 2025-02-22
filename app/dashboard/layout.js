@@ -68,7 +68,7 @@ export default function DashboardLayout({ children }) {
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed inset-y-0 right-0 z-30 w-64 bg-white transform transition-transform duration-200 ease-in-out lg:translate-x-0',
+          'fixed inset-y-0 right-0 z-30 w-full md:w-64  bg-white transform transition-transform duration-200 ease-in-out lg:translate-x-0',
           sidebarOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'
         )}
       >
@@ -81,6 +81,7 @@ export default function DashboardLayout({ children }) {
                   <Link
                     key={item.href}
                     href={item.href}
+                    onClick={() => setSidebarOpen(false)}
                     className={cn(
                       'flex items-center gap-3 px-3 py-2 text-gray-700 rounded-lg hover:bg-gray-100',
                       pathname === item.href && 'bg-gray-100 text-primary'
@@ -92,15 +93,18 @@ export default function DashboardLayout({ children }) {
                 );
               })}
               <div className="p-4 border-t">
-            <Button
-              variant="ghost"
-              className="w-full justify-start gap-3 text-red-500 hover:text-red-600 hover:bg-red-50"
-              onClick={handleLogout}
-            >
-              <LogOut className="w-5 h-5" />
-              <span>התנתק</span>
-            </Button>
-          </div>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start gap-3 text-red-500 hover:text-red-600 hover:bg-red-50"
+                  onClick={() => {
+                    setSidebarOpen(false);
+                    handleLogout();
+                  }}
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span>התנתק</span>
+                </Button>
+              </div>
             </nav>
           </div>
           

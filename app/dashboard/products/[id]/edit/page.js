@@ -220,7 +220,7 @@ export default function EditProductPage({ params }) {
           <div>
             <label className="block text-sm font-medium mb-1">יחידות באריזה</label>
             <input
-              type="text"
+              type="number"
               value={formData.units}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, units: e.target.value }))
@@ -232,7 +232,7 @@ export default function EditProductPage({ params }) {
           <div>
             <label className="block text-sm font-medium mb-1">משקל</label>
             <input
-              type="text"
+              type="number"
               value={formData.weight}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, weight: e.target.value }))
@@ -251,7 +251,7 @@ export default function EditProductPage({ params }) {
               className="w-full p-2 border rounded"
             >
               <option value="">בחר יחידת משקל</option>
-              <option value="קילוגרם">קילוגרם</option>
+              <option value='ק"ג'>ק"ג</option>
               <option value="גרם">גרם</option>
               <option value="ליטר">ליטר</option>
               <option value="מ״ל">מ״ל</option>
@@ -294,39 +294,39 @@ export default function EditProductPage({ params }) {
                   </button>
                 </div>
               ) : (
-                <>
-                  <svg
-                    className="mx-auto h-12 w-12 text-gray-400"
-                    stroke="currentColor"
-                    fill="none"
-                    viewBox="0 0 48 48"
-                    aria-hidden="true"
+                <> 
+                  <label
+                    htmlFor="file-upload"
+                    className="cursor-pointer flex flex-col items-center justify-center w-full h-full px-24"
                   >
-                    <path
-                      d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                      strokeWidth={2}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  <div className="flex text-sm text-gray-600">
-                    <label
-                      htmlFor="file-upload"
-                      className="relative cursor-pointer bg-white rounded-md font-medium text-primary hover:text-primary/90 focus-within:outline-none"
+                    <svg
+                      className="mx-auto h-12 w-12 text-gray-400"
+                      stroke="currentColor"
+                      fill="none"
+                      viewBox="0 0 48 48"
+                      aria-hidden="true"
                     >
-                      <span>העלה קובץ</span>
-                      <input
-                        id="file-upload"
-                        name="file-upload"
-                        type="file"
-                        accept="image/*"
-                        className="sr-only"
-                        onChange={handleFileUpload}
+                      <path
+                        d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                        strokeWidth={2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       />
-                    </label>
-                    <p className="pr-1">או גרור ושחרר</p>
-                  </div>
-                  <p className="text-xs text-gray-500">PNG, JPG עד 10MB</p>
+                    </svg>
+                    <div className="flex text-sm text-gray-600 justify-center">
+                      <span className="font-medium text-primary hover:text-primary/90">העלה קובץ</span>
+                      <p className="pr-1">או גרור ושחרר</p>
+                    </div>
+                    <p className="text-xs text-gray-500">PNG, JPG עד 10MB</p>
+                    <input
+                      id="file-upload"
+                      name="file-upload"
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      onChange={handleFileUpload}
+                    />
+                  </label>
                 </>
               )}
             </div>

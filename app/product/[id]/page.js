@@ -1,23 +1,53 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Heart, ArrowRight, Edit } from 'lucide-react';
-import Product from '@/models/Product';
-import connectDB from '@/lib/db';
-export const revalidate = 60; // re-generate every 60 seconds
+// import Product from '@/models/Product';
+// import connectDB from '@/lib/db';
+import { useProduct } from '@/contexts/ProductContext';
+import { useEffect, useState } from 'react';
+import { use } from 'react';
+
+// export const revalidate = 60; // re-generate every 60 seconds
 
 // async function getProduct(id) {
 //   await connectDB();
 //   return product;
 // }
 
-export default async function ProductPage({ params }) {
-  // const id = use(params).id;
-  const {id} = await params;
-  await connectDB();
-  const product = await Product.findById(id).populate('brandId', 'name logo');
+export default function ProductPage({ params }) {
+  // Properly unwrap the params promise using React.use()
+  const { id } = use(params);
+  const { selectedProduct } = useProduct();
+  const [product, setProduct] = useState(selectedProduct);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    async function fetchProduct() {
+      if (!selectedProduct) {
+        try {
+          const response = await fetch(`/api/products/${id}`);
+          if (!response.ok) throw new Error('Failed to fetch product');
+          const data = await response.json();
+          setProduct(data);
+        } catch (err) {
+          setError(true);
+        }
+      }
+    }
+    
+    if (!selectedProduct) {
+      fetchProduct();
+    }
+  }, [id, selectedProduct]);
+
+  if (error) {
+    return <div>המוצר לא נמצא</div>;
+  }
 
   if (!product) {
-    return <div>המוצר לא נמצא</div>;
+    return <div>טוען...</div>;
   }
 
   return (
@@ -25,7 +55,7 @@ export default async function ProductPage({ params }) {
       <div className="mb-8 ">
         <Link href="/shop" className="flex items-center text-primary hover:underline">
           <ArrowRight className="w-4 h-4 ml-2" />
-          חזרה לחנות
+          חזרה לקטלוג
         </Link>
       </div>
 
@@ -34,14 +64,13 @@ export default async function ProductPage({ params }) {
         <div className="relative h-96 bg-white rounded-lg overflow-hidden">
           {product.imageUrl ? (
            <Image
-           src={product.imageUrl}
-           alt={product.name}
-           fill
-           className="object-contain px-4"
-           placeholder="blur"
-           blurDataURL="/placeholder.png" // A small base64 placeholder
-         />
-         
+             src={product.imageUrl}
+             alt={product.name}
+             fill
+             className="object-contain px-4"
+             placeholder="blur"
+             blurDataURL="/placeholder.png"
+           />
           ) : (
             <div className="flex items-center justify-center h-full text-gray-400">
               אין תמונה
@@ -70,14 +99,12 @@ export default async function ProductPage({ params }) {
                   {product.description}
                 </p>
               </div>
-
-              
             </div>
           )}
 
           <div className="border-t pt-6">
             <div className="grid grid-cols-2 gap-6 items-center">
-            {product.country && (
+              {product.country && (
                 <div className="pt-2">
                   <h3 className="text-sm font-medium text-gray-500">ארץ ייצור</h3>
                   <p className="text-gray-900">{product.country}</p>
@@ -97,16 +124,15 @@ export default async function ProductPage({ params }) {
                   </p>
                 </div>
               )}
-               {product.weight && product.units && (
-              <div >
-                <h3 className="text-sm font-medium text-gray-500 mb-1">משקל כולל</h3>
-                <p className="text-gray-900">
-                  {parseFloat(product.weight) * parseInt(product.units)} {product.weightUnit}
-                </p>
-              </div>
-            )}
+              {product.weight && product.units && (
+                <div>
+                  <h3 className="text-sm font-medium text-gray-500 mb-1">משקל כולל</h3>
+                  <p className="text-gray-900">
+                    {parseFloat(product.weight) * parseInt(product.units)} {product.weightUnit}
+                  </p>
+                </div>
+              )}
             </div>
-           
           </div>
         </div>
       </div>

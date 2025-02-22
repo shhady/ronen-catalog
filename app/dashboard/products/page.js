@@ -57,7 +57,7 @@ export default function ProductsPage() {
   if (loading) return <div className="text-center p-6">טוען...</div>;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pt-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-900">ניהול מוצרים</h1>
         <Link href="/dashboard/products/new">

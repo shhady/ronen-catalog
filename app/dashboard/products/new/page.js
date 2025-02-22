@@ -171,7 +171,7 @@ export default function NewProductPage() {
           <div>
             <label className="block text-sm font-medium mb-1">יחידות באריזה</label>
             <input
-              type="text"
+              type="number"
               value={formData.units}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, units: e.target.value }))
@@ -183,7 +183,7 @@ export default function NewProductPage() {
           <div>
             <label className="block text-sm font-medium mb-1">משקל</label>
             <input
-              type="text"
+              type="number"
               value={formData.weight}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, weight: e.target.value }))
@@ -202,7 +202,7 @@ export default function NewProductPage() {
               className="w-full p-2 border rounded"
             >
               <option value="">בחר יחידת משקל</option>
-              <option value="קילוגרם">קילוגרם</option>
+              <option value='ק"ג'>ק"ג</option>
               <option value="גרם">גרם</option>
               <option value="ליטר">ליטר</option>
               <option value="מ״ל">מ״ל</option>
@@ -245,7 +245,10 @@ export default function NewProductPage() {
                   </button>
                 </div>
               ) : (
-                <>
+                <label
+                  htmlFor="file-upload"
+                  className="cursor-pointer flex flex-col items-center justify-center w-full h-full px-24"
+                >
                   <svg
                     className="mx-auto h-12 w-12 text-gray-400"
                     stroke="currentColor"
@@ -260,25 +263,20 @@ export default function NewProductPage() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                  <div className="flex text-sm text-gray-600">
-                    <label
-                      htmlFor="file-upload"
-                      className="relative cursor-pointer bg-white rounded-md font-medium text-primary hover:text-primary/90 focus-within:outline-none"
-                    >
-                      <span>העלה קובץ</span>
-                      <input
-                        id="file-upload"
-                        name="file-upload"
-                        type="file"
-                        accept="image/*"
-                        className="sr-only"
-                        onChange={handleFileUpload}
-                      />
-                    </label>
+                  <div className="flex text-sm text-gray-600 justify-center">
+                    <span className="font-medium text-primary hover:text-primary/90">העלה קובץ</span>
                     <p className="pr-1">או גרור ושחרר</p>
                   </div>
                   <p className="text-xs text-gray-500">PNG, JPG עד 10MB</p>
-                </>
+                  <input
+                    id="file-upload"
+                    name="file-upload"
+                    type="file"
+                    accept="image/*"
+                    className="sr-only"
+                    onChange={handleFileUpload}
+                  />
+                </label>
               )}
             </div>
           </div>

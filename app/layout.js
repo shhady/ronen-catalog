@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import ScrollToTop from './components/ScrollToTop';
+import { ProductProvider } from '@/contexts/ProductContext';
 
 const rubik = Rubik({
   subsets: ['hebrew'],
@@ -24,16 +25,18 @@ export default function RootLayout({ children }) {
     <html lang="he" dir="rtl">
       <body className={`${rubik.className} bg-white text-gray-900 flex flex-col min-h-screen`}>
         <ScrollToTop />
-        {/* <Providers> */}
-        <Suspense fallback={<div>Loading...</div>}>
-          <Navbar />
-          <main className="mt-16 flex-grow">
-            {children}
-          </main>
-          <Footer />
-          <WhatsAppButton />
-        </Suspense>
-        {/* </Providers> */}
+        <ProductProvider>
+          {/* <Providers> */}
+          <Suspense fallback={<div>Loading...</div>}>
+            <Navbar />
+            <main className="mt-16 flex-grow">
+              {children}
+            </main>
+            <Footer />
+            <WhatsAppButton />
+          </Suspense>
+          {/* </Providers> */}
+        </ProductProvider>
       </body>
     </html>
   );

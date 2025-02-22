@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Search, ChevronDown, Menu, X } from 'lucide-react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { useProduct } from '@/contexts/ProductContext';
 
 // Separate component for search functionality
 function SearchComponent() {
@@ -14,6 +15,7 @@ function SearchComponent() {
   const [searchResults, setSearchResults] = useState([]);
   const searchTimeoutRef = useRef(null);
   const router = useRouter();
+  const { setSelectedProduct } = useProduct();
 
   useEffect(() => {
     if (searchQuery.trim() === '') {
@@ -56,8 +58,9 @@ function SearchComponent() {
     }
   };
 
-  const handleProductClick = (productId) => {
-    router.push(`/product/${productId}`);
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+    router.push(`/product/${product._id}`);
     setSearchQuery('');
     setShowSearchDropdown(false);
   };
@@ -87,7 +90,7 @@ function SearchComponent() {
           {searchResults.map((product) => (
             <div
               key={product._id}
-              onClick={() => handleProductClick(product._id)}
+              onClick={() => handleProductClick(product)}
               className="flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0"
             >
               {product.imageUrl && (
