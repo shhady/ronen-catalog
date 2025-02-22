@@ -163,12 +163,12 @@ export default function ProductPage({ params }) {
             <div className="grid grid-cols-2 gap-6 items-center">
               {product.country && (
                 <div className="pt-2">
-                  <h3 className="text-sm font-medium text-gray-500">ארץ ייצור</h3>
+                  <h3 className="text-sm font-medium text-gray-500 mb-1">ארץ ייצור</h3>
                   <p className="text-gray-900">{product.country}</p>
                 </div>
               )}
               {product.units && (
-                <div>
+                <div className="pt-2">
                   <h3 className="text-sm font-medium text-gray-500 mb-1">יחידות באריזה</h3>
                   <p className="text-gray-900">{product.units}</p>
                 </div>
