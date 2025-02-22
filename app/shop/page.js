@@ -1,7 +1,7 @@
 import ShopClient from './ShopClient';
 import connectDB from '@/lib/db';
 import Product from '@/models/Product';
-
+export const dynamic = 'force-dynamic';
 export default async function ShopPage() {
   await connectDB();
   const initialProducts = await Product.find()

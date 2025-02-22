@@ -4,7 +4,7 @@ import { Button } from './components/ui/button';
 import { getBrands } from './lib/data';
 import WhatsAppButton from './components/WhatsAppButton';
 import PageViewTracker from './components/PageViewTracker';
-
+export const dynamic = 'force-dynamic';
 export default async function HomePage() {
   const brands = await getBrands();
 
