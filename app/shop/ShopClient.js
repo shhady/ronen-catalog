@@ -326,7 +326,7 @@ export default function ShopClient({ initialProducts }) {
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="p-6">
               <div className="flex flex-col md:flex-row justify-center items-center gap-1 md:gap-6  w-full">
-                <div className="relative w-24 h-24 bg-primary/10 rounded-lg mb-0 md:mb-0">
+                <div className="relative w-36 h-36 bg-primary/10 rounded-lg mb-0 md:mb-0">
                   <Image
                     src={selectedBrand.logo}
                     alt={selectedBrand.name}
