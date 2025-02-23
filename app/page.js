@@ -15,7 +15,7 @@ export default async function HomePage() {
       <section className="relative h-[60vh] flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/10">
         <div className="absolute inset-0 z-0">
           <Image
-            src="/hero.png"
+            src="https://res.cloudinary.com/dypltfq4l/image/upload/v1740168396/af81e8c6-8697-4003-beae-ed45eb57a577_siyjys.webp"
             alt="Hero Background"
             fill
             sizes="100vw"
