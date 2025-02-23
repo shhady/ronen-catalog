@@ -104,9 +104,9 @@ export default async function HomePage() {
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="text-3xl font-bold mb-6">מותגים</h2>
-            <p className="text-lg text-gray-600 mb-12">
+            {/* <p className="text-lg text-gray-600 mb-12">
               המותגים המובילים שלנו נבחרו בקפידה כדי להבטיח את האיכות הגבוהה ביותר
-            </p>
+            </p> */}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {brands.map((brand) => (
