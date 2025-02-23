@@ -42,71 +42,24 @@ export default async function HomePage() {
 
       {/* Content Section */}<section className="pt-16 bg-gray-50">
       <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-6">למה לבחור בנו?</h2>
+          <div className="max-w-4xl mx-auto text-center ">
+            <h2 className="text-3xl font-bold mb-6">Cicilia Import</h2>
             <p className="text-lg text-gray-600 ">
-              אנחנו מציעים מגוון רחב של מוצרים איכותיים מהמותגים המובילים בשוק
+            היא בית למצוינות קולינרית, המובילה את תרבות הגסטרונומיה האיטלקית בישראל. מאז היווסדה בשנת 2018, החברה מתמחה בייבוא ושיווק מוצרי פרימיום איטלקיים, הנבחרים בקפידה ממיטב היצרנים והמותגים הידועים באיטליה.
             </p>
           </div>
       </div>
       </section>
-      {/* <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold mb-6">למה לבחור בנו?</h2>
-            <p className="text-lg text-gray-600 mb-12">
-              אנחנו מציעים מגוון רחב של מוצרים איכותיים מהמותגים המובילים בשוק
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold mb-3">איכות מובטחת</h3>
-              <p className="text-gray-600">
-                כל המוצרים שלנו נבחרים בקפידה ועוברים בקרת איכות קפדנית
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold mb-3">מגוון רחב</h3>
-              <p className="text-gray-600">
-                מבחר עצום של מוצרים ממיטב המותגים המובילים בתחום
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md text-center">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold mb-3">שירות מקצועי</h3>
-              <p className="text-gray-600">
-                צוות המומחים שלנו זמין לכל שאלה ומספק ייעוץ מקצועי
-              </p>
-            </div>
-          </div>
-        </div>
-      </section> */}
+      
 
       {/* Brands Section */}
       <section className="py-16 px-4 md:px-8 bg-gray-50">
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold mb-6">מותגים</h2>
-            {/* <p className="text-lg text-gray-600 mb-12">
+            <h2 className="text-3xl font-bold mb-6">Our Brands</h2>
+            <p className="text-lg text-gray-600 mb-12">
               המותגים המובילים שלנו נבחרו בקפידה כדי להבטיח את האיכות הגבוהה ביותר
-            </p> */}
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {brands.map((brand) => (
@@ -116,8 +69,8 @@ export default async function HomePage() {
                 className="block"
               >
                 <div className="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
-                  <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <div className="relative w-[128px] h-[128px]">
+                  <div className="w-32 h-32 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="relative w-32 h-32">
                       <Image
                         src={brand.logo}
                         alt={brand.name}
