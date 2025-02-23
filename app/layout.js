@@ -16,8 +16,8 @@ const rubik = Rubik({
 });
 
 export const metadata = {
-  title: 'רונן קטלוג',
-  description: 'קטלוג מוצרים של רונן',
+  title: 'Cicilia Import',
+  description: 'קטלוג מוצרים של Cicilia Import',
 };
 
 export default function RootLayout({ children }) {
