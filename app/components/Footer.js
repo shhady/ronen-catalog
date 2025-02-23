@@ -25,11 +25,11 @@ export default function Footer() {
                   עמוד הבית
                 </Link>
               </li>
-              {/* <li>
+              <li>
                 <Link href="/about" className="hover:text-white transition-colors">
                   אודות
                 </Link>
-              </li> */}
+              </li>
               <li>
                 <Link href="/shop" className="hover:text-white transition-colors">
                   מוצרים
@@ -77,13 +77,13 @@ export default function Footer() {
           </div> */}
 
           {/* About Short */}
-          <div>
+          {/* <div>
             <h3 className="text-lg font-semibold mb-4 text-white">אודותינו</h3>
             <p className="text-sm leading-relaxed">
               אנחנו חברה מובילה בתחום המזון והמשקאות, המתמחה באספקת מוצרים איכותיים
               ממיטב המותגים בעולם. אנו מחויבים לאיכות ושירות ללא פשרות.
             </p>
-          </div>
+          </div> */}
         </div>
 
         {/* Copyright */}
