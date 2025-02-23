@@ -336,7 +336,7 @@ export default function ShopClient({ initialProducts }) {
                 </div>
                 <div className="flex-1 text-center md:text-start">
                   <h1 className="text-2xl font-bold mb-2 text-center md:text-start">{selectedBrand.name}</h1>
-                  <p className="text-gray-600 text-center md:text-start">{selectedBrand.description}</p>
+                  <p className="text-gray-600 text-center md:text-start">{selectedBrand.longDescription}</p>
                 </div>
               </div>
             </div>

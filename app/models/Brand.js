@@ -6,6 +6,7 @@ const BrandSchema = new mongoose.Schema({
   description: { type: String, required: true },
   status: { type: String, default: 'shown' },
   createdAt: { type: Date, default: Date.now },
+  longDescription: { type: String, required: true },
 });
 
 const Brand = mongoose.models?.Brand || mongoose.model('Brand', BrandSchema);

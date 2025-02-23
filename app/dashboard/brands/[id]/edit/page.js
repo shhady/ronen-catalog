@@ -16,6 +16,7 @@ export default function EditBrandPage({ params }) {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
+    longDescription: '',
     logo: '',
   });
 
@@ -35,6 +36,7 @@ export default function EditBrandPage({ params }) {
       setFormData({
         name: data.name,
         description: data.description,
+        longDescription: data.longDescription,
         logo: data.logo,
       });
     } catch (error) {
@@ -158,7 +160,18 @@ export default function EditBrandPage({ params }) {
               required
             />
           </div>
-
+          <div>
+            <label className="block text-sm font-medium mb-1">תיאור ארוך</label>
+            <textarea
+              value={formData.longDescription}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, longDescription: e.target.value }))
+              }
+              className="w-full p-2 border rounded"
+              rows={4}
+              required
+            />
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               לוגו

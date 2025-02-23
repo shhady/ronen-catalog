@@ -5,7 +5,7 @@ import connectDB from '@/lib/db';
 import Brand from '@/models/Brand';
 
 async function verifyAuth(request) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value;
   
   if (!token) {
@@ -46,7 +46,7 @@ export async function POST(request) {
     }
 
     const data = await request.json();
-    const { name, logo, description } = data;
+    const { name, logo, description, longDescription } = data;
 
     if (!name || !logo || !description) {
       return NextResponse.json(
@@ -60,6 +60,7 @@ export async function POST(request) {
       name,
       logo,
       description,
+      longDescription,
       status: 'shown',
     });
 
@@ -85,7 +86,7 @@ export async function PUT(request) {
     }
 
     const data = await request.json();
-    const { id, name, logo, description, status } = data;
+    const { id, name, logo, description, status, longDescription } = data;
 
     if (!id || !name || !description) {
       return NextResponse.json(
@@ -108,6 +109,7 @@ export async function PUT(request) {
     if (logo) brand.logo = logo;
     brand.description = description;
     if (status) brand.status = status;
+    brand.longDescription = longDescription;
 
     await brand.save();
     return NextResponse.json(brand);

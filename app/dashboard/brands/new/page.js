@@ -15,6 +15,7 @@ export default function NewBrandPage() {
     name: '',
     description: '',
     logo: '',
+    longDescription: '',
   });
 
   const handleSubmit = async (e) => {
@@ -117,6 +118,18 @@ export default function NewBrandPage() {
               value={formData.description}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, description: e.target.value }))
+              }
+              className="w-full p-2 border rounded"
+              rows={4}
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">תיאור ארוך</label>
+            <textarea
+              value={formData.longDescription}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, longDescription: e.target.value }))
               }
               className="w-full p-2 border rounded"
               rows={4}
