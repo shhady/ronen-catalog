@@ -4,7 +4,7 @@ import { Button } from './components/ui/button';
 import { getBrands } from './lib/data';
 import WhatsAppButton from './components/WhatsAppButton';
 import PageViewTracker from './components/PageViewTracker';
-export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const brands = await getBrands();
 
@@ -15,7 +15,7 @@ export default async function HomePage() {
       <section className="relative h-[60vh] flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/10">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://res.cloudinary.com/dypltfq4l/image/upload/v1740168396/af81e8c6-8697-4003-beae-ed45eb57a577_siyjys.webp"
+            src="/hero.png"
             alt="Hero Background"
             fill
             sizes="100vw"
@@ -40,8 +40,17 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Content Section */}
-      <section className="py-16 bg-gray-50">
+      {/* Content Section */}<section className="py-16 bg-gray-50">
+      <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center mb-12">
+            <h2 className="text-3xl font-bold mb-6">למה לבחור בנו?</h2>
+            <p className="text-lg text-gray-600 mb-12">
+              אנחנו מציעים מגוון רחב של מוצרים איכותיים מהמותגים המובילים בשוק
+            </p>
+          </div>
+      </div>
+      </section>
+      {/* <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="text-3xl font-bold mb-6">למה לבחור בנו?</h2>
@@ -88,38 +97,40 @@ export default async function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Brands Section */}
-      <section className="py-16 px-4 md:px-8">
+      <section className="py-16 px-4 md:px-8 bg-gray-50">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">מותגים</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="max-w-4xl mx-auto text-center mb-12">
+            <h2 className="text-3xl font-bold mb-6">מותגים</h2>
+            <p className="text-lg text-gray-600 mb-12">
+              המותגים המובילים שלנו נבחרו בקפידה כדי להבטיח את האיכות הגבוהה ביותר
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {brands.map((brand) => (
               <Link
                 key={brand._id}
-                href={`/shop?brand=${brand._id}&query=&sort=newest`}
+                href={`/shop?brand=${brand._id}`}
                 className="block"
               >
-                <div className="bg-white rounded-lg border border-gray-500 p-4 hover:shadow-md transition-shadow">
-                  <div className="relative h-40 mb-4">
-                    <Image
-                      src={brand.logo}
-                      alt={brand.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                      className="object-contain"
-                    />
-                  </div>
-                  <div className="text-right">
-                    <div className="flex gap-1">
-                      <span className="text-lg">+</span>
-                      <h3 className="text-lg font-medium text-right">{brand.name}</h3>
+                <div className="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
+                  <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="relative w-20 h-20">
+                      <Image
+                        src={brand.logo}
+                        alt={brand.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                        className="object-contain"
+                      />
                     </div>
-                    <p className="text-gray-600 mt-1 text-sm">
-                      {brand.description}
-                    </p>
                   </div>
+                  <h3 className="text-xl font-semibold mb-3">{brand.name}</h3>
+                  <p className="text-gray-600 text-sm">
+                    {brand.description}
+                  </p>
                 </div>
               </Link>
             ))}

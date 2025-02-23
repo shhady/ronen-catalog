@@ -8,17 +8,41 @@ import { Plus, Pencil, Trash2 } from 'lucide-react';
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
+  const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [filters, setFilters] = useState({
+    search: '',
+    brandId: ''
+  });
 
   useEffect(() => {
-    fetchProducts();
+    Promise.all([fetchProducts(), fetchBrands()]);
   }, []);
+
+  const fetchBrands = async () => {
+    try {
+      const res = await fetch('/api/brands', {
+        credentials: 'include'
+      });
+      if (!res.ok) {
+        throw new Error('Failed to fetch brands');
+      }
+      const data = await res.json();
+      setBrands(data);
+    } catch (error) {
+      console.error('Error fetching brands:', error);
+    }
+  };
 
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await fetch('/api/products', {
+      const queryParams = new URLSearchParams();
+      if (filters.search) queryParams.append('query', filters.search);
+      if (filters.brandId) queryParams.append('brand', filters.brandId);
+
+      const res = await fetch(`/api/products?${queryParams}`, {
         credentials: 'include'
       });
       if (!res.ok) {
@@ -32,6 +56,25 @@ export default function ProductsPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Add debounce to prevent too many API calls
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchProducts();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [filters]);
+
+  const handleFilterChange = (key, value) => {
+    setFilters(prev => ({ ...prev, [key]: value }));
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      search: '',
+      brandId: ''
+    });
   };
 
   const handleDelete = async (id) => {
@@ -74,6 +117,49 @@ export default function ProductsPage() {
         </div>
       )}
 
+      {/* Filters Section */}
+      <div className="bg-white p-4 rounded-lg shadow">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">חיפוש לפי שם</label>
+            <input
+              type="text"
+              value={filters.search}
+              onChange={(e) => handleFilterChange('search', e.target.value)}
+              placeholder="הקלד לחיפוש..."
+              className="w-full p-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">סינון לפי מותג</label>
+            <select
+              value={filters.brandId}
+              onChange={(e) => handleFilterChange('brandId', e.target.value)}
+              className="w-full p-2 border rounded"
+            >
+              <option value="">כל המותגים</option>
+              {brands.map((brand) => (
+                <option key={brand._id} value={brand._id}>
+                  {brand.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        {(filters.search || filters.brandId) && (
+          <div className="mt-4 flex justify-end">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={clearFilters}
+            >
+              נקה סינון
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {/* Products Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
           <div
