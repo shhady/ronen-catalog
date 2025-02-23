@@ -42,7 +42,7 @@ export default async function HomePage() {
 
       {/* Content Section */}<section className="pt-16 bg-gray-50">
       <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center mb-12">
+          <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold mb-6">למה לבחור בנו?</h2>
             <p className="text-lg text-gray-600 ">
               אנחנו מציעים מגוון רחב של מוצרים איכותיים מהמותגים המובילים בשוק
@@ -117,7 +117,7 @@ export default async function HomePage() {
               >
                 <div className="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
                   <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <div className="relative w-20 h-20">
+                    <div className="relative w-[128px] h-[128px]">
                       <Image
                         src={brand.logo}
                         alt={brand.name}
