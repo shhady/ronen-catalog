@@ -191,6 +191,23 @@ export default function ShopClient({ initialProducts }) {
     localStorage.setItem('favorites', JSON.stringify(newFavorites));
   };
 
+  // Add this function to group products by brand
+  const groupProductsByBrand = (products) => {
+    return products.reduce((groups, product) => {
+      const brandId = product.brandId?._id;
+      if (!brandId) return groups;
+      
+      if (!groups[brandId]) {
+        groups[brandId] = {
+          brand: product.brandId,
+          products: []
+        };
+      }
+      groups[brandId].products.push(product);
+      return groups;
+    }, {});
+  };
+
   if (loading && products.length === 0) return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col gap-8">
@@ -301,54 +318,65 @@ export default function ShopClient({ initialProducts }) {
             </div>
           )}
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {products.map((product, index) => (
-              <div
-                key={product._id}
-                ref={index === products.length - 1 ? lastProductElementRef : null}
-                className="bg-white rounded-lg shadow border border-gray-400 overflow-hidden"
-              >
-                <Link 
-                  href={`/product/${product._id}`}
-                  onClick={() => setSelectedProduct(product)}
-                >
-                  <div className="relative h-48">
-                    {product.imageUrl && (
-                      <Image
-                        src={product.imageUrl}
-                        alt={product.name}
-                        fill
-                        className="object-contain"
-                      />
-                    )}
-                  </div>
-                </Link>
-                <div className="flex justify-between items-start p-4">
-                  <div className="flex-col justify-between w-full items-start mb-2">
-                    <Link href={`/product/${product._id}`}>
-                      <h3 className="text-lg font-semibold w-full">{product.name}</h3>
-                      {product.brandId && (
-                        <p className="text-sm text-gray-600">
-                          {product.brandId.name}
-                        </p>
-                      )}
-                    </Link>
-                  </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleFavorite(product._id);
-                    }}
-                    className="text-gray-500 hover:text-red-500"
-                  >
-                    <Heart
-                      className={`w-5 h-5 ${
-                        favorites.includes(product._id)
-                          ? 'fill-red-500 text-red-500'
-                          : ''
-                      }`}
-                    />
-                  </button>
+          <div className="space-y-8">
+            {Object.values(groupProductsByBrand(products)).map((group) => (
+              <div key={group.brand._id} className="space-y-4">
+                <h2 className="text-xl font-bold border-b pb-2">{group.brand.name}</h2>
+                
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  {group.products.map((product, index) => (
+                    <div
+                      key={product._id}
+                      ref={index === products.length - 1 ? lastProductElementRef : null}
+                      className="bg-white rounded-lg shadow overflow-hidden"
+                    >
+                      <Link 
+                        href={`/product/${product._id}`}
+                        onClick={() => setSelectedProduct(product)}
+                      >
+                        <div className="relative h-48">
+                          {product.imageUrl && (
+                            <Image
+                              src={product.imageUrl}
+                              alt={product.name}
+                              fill
+                              className="object-contain p-4"
+                            />
+                          )}
+                        </div>
+                      </Link>
+                      <div className="p-4">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <Link href={`/product/${product._id}`}>
+                              <h3 className="text-md font-semibold">{product.name}</h3>
+                            </Link>
+                            <div className="text-sm text-gray-600 mt-1">
+                              משקל: {product.weight || 'לא צוין'} {product.weightUnit || ''}
+                            </div>
+                            {/* <div className="text-sm text-gray-600">
+                              מחיר: {product.price ? `₪${product.price}` : 'אין במלאי'}
+                            </div> */}
+                          </div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleFavorite(product._id);
+                            }}
+                            className="text-gray-500 hover:text-red-500"
+                          >
+                            <Heart
+                              className={`w-5 h-5 ${
+                                favorites.includes(product._id)
+                                  ? 'fill-red-500 text-red-500'
+                                  : ''
+                              }`}
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             ))}
