@@ -15,7 +15,7 @@ export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Navigation Links */}
           <div>
             <h3 className="text-lg font-semibold mb-4 text-white">ניווט</h3>
