@@ -32,19 +32,19 @@ export default async function HomePage() {
           <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto">
             גלו את המגוון הרחב של המוצרים האיכותיים שלנו
           </p>
-          <Link href="/shop">
+          {/* <Link href="/shop">
             <Button size="lg" className="text-lg bg-white text-black hover:bg-gray-100">
               לצפייה בקטלוג
             </Button>
-          </Link>
+          </Link> */}
         </div>
       </section>
 
       {/* Content Section */}<section className="pt-16 bg-gray-50">
       <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center ">
-            <h2 className="text-3xl font-bold mb-6">Cicilia Import</h2>
-            <p className="text-lg text-gray-600 ">
+            <h2 className="text-3xl font-bold mb-3">Cicilia Import</h2>
+            <p className="text-[22px] text-gray-600 ">
             היא בית למצוינות קולינרית, המובילה את תרבות הגסטרונומיה האיטלקית בישראל. מאז היווסדה בשנת 2018, החברה מתמחה בייבוא ושיווק מוצרי פרימיום איטלקיים, הנבחרים בקפידה ממיטב היצרנים והמותגים הידועים באיטליה.
             </p>
           </div>
@@ -56,7 +56,7 @@ export default async function HomePage() {
       <section className="py-16 px-4 md:px-8 bg-gray-50">
         <div className="container mx-auto">
           <div className="max-w-4xl mx-auto text-center mb-12">
-            <h2 className="text-3xl font-bold mb-6">Our Brands</h2>
+            <h2 className="text-3xl font-bold mb-3">Our Brands</h2>
             <p className="text-lg text-gray-600 mb-12">
               המותגים המובילים שלנו נבחרו בקפידה כדי להבטיח את האיכות הגבוהה ביותר
             </p>

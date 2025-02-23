@@ -38,6 +38,7 @@ export default function ShopClient({ initialProducts }) {
   const observer = useRef();
   const isInitialLoad = useRef(true);
   const { setSelectedProduct } = useProduct();
+  const [selectedBrand, setSelectedBrand] = useState(null);
 
   const lastProductElementRef = useCallback(node => {
     if (loading) return;
@@ -97,6 +98,15 @@ export default function ShopClient({ initialProducts }) {
   useEffect(() => {
     fetchBrands();
   }, []);
+
+  useEffect(() => {
+    if (filters.brand) {
+      const brand = brands.find(b => b._id === filters.brand);
+      setSelectedBrand(brand);
+    } else {
+      setSelectedBrand(null);
+    }
+  }, [filters.brand, brands]);
 
   const fetchProducts = async (currentFilters) => {
     try {
@@ -237,7 +247,7 @@ export default function ShopClient({ initialProducts }) {
               </select>
             </div>
 
-            <div className="w-full">
+            {/* <div className="w-full">
               <label className="w-full text-sm font-medium mb-2">מיון</label>
               <select
                 value={filters.sort}
@@ -247,7 +257,7 @@ export default function ShopClient({ initialProducts }) {
                 <option value="newest">חדש ביותר</option>
                 <option value="oldest">ישן ביותר</option>
               </select>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -270,6 +280,8 @@ export default function ShopClient({ initialProducts }) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col gap-8">
+       
+
         {/* Filters Sidebar */}
         <div className="bg-white p-4 rounded-lg shadow">
           <div className="flex justify-between items-center mb-4">
@@ -281,7 +293,7 @@ export default function ShopClient({ initialProducts }) {
 
           <div className="flex flex-col md:flex-row justify-start items-start md:items-center gap-4">
             <div className="w-full">
-              <label className="w-full text-sm font-medium mb-2">מותג</label>
+              <label className="w-full text-sm font-medium mb-2">בחר מותג</label>
               <select
                 value={filters.brand}
                 onChange={(e) => handleFilterChange('brand', e.target.value)}
@@ -296,7 +308,7 @@ export default function ShopClient({ initialProducts }) {
               </select>
             </div>
 
-            <div className="w-full">
+            {/* <div className="w-full">
               <label className="w-full text-sm font-medium mb-2">מיון</label>
               <select
                 value={filters.sort}
@@ -306,10 +318,30 @@ export default function ShopClient({ initialProducts }) {
                 <option value="newest">חדש ביותר</option>
                 <option value="oldest">ישן ביותר</option>
               </select>
-            </div>
+            </div> */}
           </div>
         </div>
-
+ {/* Brand Details Section - Only show when brand is selected */}
+ {selectedBrand && (
+          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+            <div className="p-6">
+              <div className="flex flex-col md:flex-row justify-center items-center gap-1 md:gap-6  w-full">
+                <div className="relative w-24 h-24 bg-primary/10 rounded-lg mb-0 md:mb-0">
+                  <Image
+                    src={selectedBrand.logo}
+                    alt={selectedBrand.name}
+                    fill
+                    className="object-contain p-2"
+                  />
+                </div>
+                <div className="flex-1 text-center md:text-start">
+                  <h1 className="text-2xl font-bold mb-2 text-center md:text-start">{selectedBrand.name}</h1>
+                  <p className="text-gray-600 text-center md:text-start">{selectedBrand.description}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         {/* Products Grid */}
         <div className="flex-1">
           {error && (
@@ -321,7 +353,7 @@ export default function ShopClient({ initialProducts }) {
           <div className="space-y-8">
             {Object.values(groupProductsByBrand(products)).map((group) => (
               <div key={group.brand._id} className="space-y-4">
-                <h2 className="text-xl font-bold border-b pb-2">{group.brand.name}</h2>
+               {!selectedBrand && <h2 className="text-xl font-bold border-b pb-2">{group.brand.name}</h2>} 
                 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                   {group.products.map((product, index) => (

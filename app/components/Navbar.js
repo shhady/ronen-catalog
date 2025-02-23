@@ -171,7 +171,7 @@ export default function Navbar() {
               height={40}
               className="object-contain"
             /> */}
-            <span className="text-xl font-bold text-gray-900 mr-2">רונן קטלוג</span>
+            <span className="text-xl font-bold text-gray-900 mr-2">Cicilia Import</span>
           </Link>
 
           {/* Desktop Navigation */}

@@ -160,7 +160,7 @@ export default function ProductPage({ params }) {
           )}
 
           <div className="border-t pt-6">
-            <div className="grid grid-cols-2 gap-6 items-center">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 items-center">
               {product.country && (
                 <div className="pt-2">
                   <h3 className="text-sm font-medium text-gray-500 mb-1">ארץ ייצור</h3>
@@ -174,21 +174,21 @@ export default function ProductPage({ params }) {
                 </div>
               )}
               {product.weight && (
-                <div>
+                <div className="pt-2">
                   <h3 className="text-sm font-medium text-gray-500 mb-1">משקל ליחידה</h3>
                   <p className="text-gray-900">
                     {product.weight} {product.weightUnit}
                   </p>
                 </div>
               )}
-              {product.weight && product.units && (
+              {/* {product.weight && product.units && (
                 <div>
                   <h3 className="text-sm font-medium text-gray-500 mb-1">משקל כולל</h3>
                   <p className="text-gray-900">
                     {parseFloat(product.weight) * parseInt(product.units)} {product.weightUnit}
                   </p>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>
