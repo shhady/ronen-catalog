@@ -240,7 +240,7 @@ export default function EditProductPage({ params }) {
           <div>
             <label className="block text-sm font-medium mb-1">משקל</label>
             <input
-              type="number"
+              type="text"
               value={formData.weight}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, weight: e.target.value }))

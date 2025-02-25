@@ -25,7 +25,7 @@ export async function POST(request) {
     const user = await User.create({
       email,
       password: hashedPassword,
-      role: 'admin' // Default role as per our model
+      role: 'user' // Default role as per our model
     });
 
     // Remove password from response
