@@ -6,6 +6,11 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 
+function stripHtml(html) {
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, '');
+}
+
 export default function BrandsPage() {
   const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -94,7 +99,7 @@ export default function BrandsPage() {
                 <div>
                   <h3 className="text-lg font-semibold">{brand.name}</h3>
                   <p className="text-gray-600 text-sm mt-1 line-clamp-2">
-                    {brand.description}
+                    {stripHtml(brand.description)}
                   </p>
                 </div>
               </div>
