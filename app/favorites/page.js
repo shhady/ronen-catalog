@@ -85,7 +85,7 @@ export default function FavoritesPage() {
       <div className="mb-8">
         <Link href="/shop" className="flex items-center text-primary hover:underline">
           <ArrowRight className="w-4 h-4 ml-2" />
-          חזרה לקטלוג
+          חזרה 
         </Link>
       </div>
 
