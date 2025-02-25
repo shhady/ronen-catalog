@@ -41,18 +41,19 @@ const stripHtml = (html) => {
 
 export default function ProductPage({ params }) {
   const { id } = use(params);
-  const { selectedProduct } = useProduct();
+  const { selectedProduct, setSelectedProduct } = useProduct();
   const [product, setProduct] = useState(selectedProduct);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loadingRelated, setLoadingRelated] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    if (!selectedProduct) {
-      // Only fetch product if not in context
+    if (!selectedProduct || selectedProduct._id !== id) {
+      // Fetch product if there's no selected product or if IDs don't match
       fetchProduct();
     } else {
-      // If we have the product, just fetch related products
+      // If we have the matching product in context, use it and fetch related products
+      setProduct(selectedProduct);
       fetchRelatedProducts(selectedProduct.brandId);
     }
   }, [id, selectedProduct]);
@@ -133,12 +134,12 @@ export default function ProductPage({ params }) {
       {/* Main product content */}
       <div className="mb-6">
         <Button
-          onClick={() => router.back()}
+          onClick={() => router.push(`/shop?brand=${product.brandId?._id}`)}
           variant="ghost"
           className="gap-2"
         >
           <ArrowRight className="w-4 h-4" />
-          חזור
+          חזור לקטלוג
         </Button>
       </div>
 
@@ -243,10 +244,13 @@ export default function ProductPage({ params }) {
           <h2 className="text-2xl font-bold mb-6">מוצרים דומים</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {relatedProducts.map((relatedProduct) => (
-              <Link
+              <div
                 key={relatedProduct._id}
-                href={`/product/${relatedProduct._id}`}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+                onClick={() => {
+                  setSelectedProduct(relatedProduct);
+                  router.push(`/product/${relatedProduct._id}`);
+                }}
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
               >
                 <div className="relative h-48">
                   <Image
@@ -264,7 +268,7 @@ export default function ProductPage({ params }) {
                     </p>
                   )}
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </div>
