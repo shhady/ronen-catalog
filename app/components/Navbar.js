@@ -164,15 +164,14 @@ export default function Navbar() {
             href="/" 
             className="flex items-center space-x-2 hover:opacity-90 transition-opacity"
           >
-            {/* <Image
-              src="/logo.png"
+            <Image
+              src="https://res.cloudinary.com/dypltfq4l/image/upload/v1740480696/logo-png_qy7qwc.png"
               alt="Logo"
-              width={40}
-              height={40}
+              width={100}
+              height={80}
               className="object-contain"
-            /> */}
-            <span className="text-xl font-bold text-gray-900 mr-2">Cicilia Import</span>
-          </Link>
+            />
+            </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center justify-between flex-1 mr-8">
@@ -183,15 +182,20 @@ export default function Navbar() {
               >
                 דף הבית
               </Link>
-
+              <Link 
+                href="/about" 
+                className="text-gray-900 hover:text-gray-600 transition-colors font-medium"
+              >
+                אודות
+              </Link>
+            
               <Link 
                 href="/favorites" 
                 className="text-gray-900 hover:text-gray-600 transition-colors font-medium"
               >
                 מועדפים
               </Link>
-
-            
+             
               {/* Categories Dropdown */}
               <div className="relative">
                 <button
