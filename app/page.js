@@ -27,7 +27,7 @@ export default async function HomePage() {
             className="object-cover"
             quality={85}
           />
-          <div className="absolute inset-0 bg-black/40" />
+          {/* <div className="absolute inset-0 bg-black/40" /> */}
         </div>
         {/* <div className="relative z-10 text-center text-white">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
