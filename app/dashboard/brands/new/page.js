@@ -6,6 +6,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, X } from 'lucide-react';
+import dynamic from 'next/dynamic';
+
+const RichTextEditor = dynamic(() => import('@/components/RichTextEditor'), {
+  ssr: false,
+  loading: () => (
+    <div className="border rounded-lg overflow-hidden bg-white min-h-[300px] animate-pulse" />
+  ),
+});
 
 export default function NewBrandPage() {
   const router = useRouter();
@@ -113,27 +121,22 @@ export default function NewBrandPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">תיאור</label>
-            <textarea
+            <label className="block text-sm font-medium mb-1">תיאור קצר</label>
+            <RichTextEditor
               value={formData.description}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, description: e.target.value }))
+              onChange={(value) =>
+                setFormData((prev) => ({ ...prev, description: value }))
               }
-              className="w-full p-2 border rounded"
-              rows={4}
-              required
             />
           </div>
+
           <div>
-            <label className="block text-sm font-medium mb-1">תיאור ארוך</label>
-            <textarea
+            <label className="block text-sm font-medium mb-1">תיאור מלא</label>
+            <RichTextEditor
               value={formData.longDescription}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, longDescription: e.target.value }))
+              onChange={(value) =>
+                setFormData((prev) => ({ ...prev, longDescription: value }))
               }
-              className="w-full p-2 border rounded"
-              rows={4}
-              required
             />
           </div>
 

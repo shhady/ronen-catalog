@@ -4,7 +4,34 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Plus, Pencil, Trash2 } from 'lucide-react';
+import { Plus, Pencil, Trash2, Search, X } from 'lucide-react';
+
+// Function to convert HTML to formatted text while preserving structure
+const stripHtml = (html) => {
+  if (!html) return '';
+  
+  // Create a temporary div
+  const tmp = document.createElement('DIV');
+  tmp.innerHTML = html;
+  
+  // Process block elements to add line breaks
+  const blockElements = ['p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li'];
+  blockElements.forEach(tag => {
+    const elements = tmp.getElementsByTagName(tag);
+    for (let el of elements) {
+      el.innerHTML = el.innerHTML + '\n';
+    }
+  });
+
+  // Get text content and trim extra whitespace
+  let text = tmp.textContent || tmp.innerText || '';
+  text = text.replace(/\n\s*\n/g, '\n').trim(); // Remove multiple consecutive line breaks
+  
+  // Get only first three lines
+  const lines = text.split('\n');
+  const threeLines = lines.slice(0, 3);
+  return threeLines.join('\n') + (lines.length > 3 ? '...' : '');
+};
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -180,19 +207,12 @@ export default function ProductsPage() {
               <div className="flex justify-between items-start mb-2">
                 <div>
                   <h3 className="text-lg font-semibold">{product.name}</h3>
-                  {product.brandId && (
-                    <p className="text-sm text-gray-600">
-                      {product.brandId.name}
-                    </p>
-                  )}
+                  <p className="text-gray-600 text-sm mt-1 line-clamp-3 whitespace-pre-line">
+                    {stripHtml(product.description)}
+                  </p>
                 </div>
               </div>
-              {product.description && (
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                  {product.description}
-                </p>
-              )}
-              <div className="flex gap-2">
+              <div className="flex gap-2 mt-4">
                 <Link href={`/dashboard/products/${product._id}/edit`}>
                   <Button size="sm" className="gap-2">
                     <Pencil className="w-4 h-4" />

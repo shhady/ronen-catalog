@@ -11,6 +11,7 @@ import {
   LogOut,
   Menu,
   X,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 
@@ -29,6 +30,11 @@ const sidebarItems = [
     title: 'מותגים',
     href: '/dashboard/brands',
     icon: Tags,
+  },
+  {
+    title: 'תמונה ראשית',
+    href: '/dashboard/hero',
+    icon: ImageIcon,
   },
 ];
 

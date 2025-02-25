@@ -8,6 +8,28 @@ import { Button } from '@/components/ui/button';
 import { Heart, Search, Filter, X } from 'lucide-react';
 import { useProduct } from '@/contexts/ProductContext';
 
+// Function to convert HTML to formatted text while preserving structure
+const stripHtml = (html) => {
+  if (!html) return '';
+  
+  // Create a temporary div
+  const tmp = document.createElement('DIV');
+  tmp.innerHTML = html;
+  
+  // Process block elements to add line breaks
+  const blockElements = ['p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li'];
+  blockElements.forEach(tag => {
+    const elements = tmp.getElementsByTagName(tag);
+    for (let el of elements) {
+      el.innerHTML = el.innerHTML + '\n';
+    }
+  });
+
+  // Get text content and trim extra whitespace
+  let text = tmp.textContent || tmp.innerText || '';
+  return text.replace(/\n\s*\n/g, '\n').trim(); // Remove multiple consecutive line breaks
+};
+
 export default function ShopClient({ initialProducts }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -218,6 +240,27 @@ export default function ShopClient({ initialProducts }) {
     }, {});
   };
 
+  // Function to fetch brand details
+  const fetchBrandDetails = async (brandId) => {
+    try {
+      const res = await fetch(`/api/brands/${brandId}`);
+      if (!res.ok) throw new Error('Failed to fetch brand details');
+      const data = await res.json();
+      setSelectedBrand(data);
+    } catch (error) {
+      console.error('Error fetching brand details:', error);
+    }
+  };
+
+  // Effect to fetch brand details when brand filter changes
+  useEffect(() => {
+    if (filters.brand) {
+      fetchBrandDetails(filters.brand);
+    } else {
+      setSelectedBrand(null);
+    }
+  }, [filters.brand]);
+
   if (loading && products.length === 0) return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col gap-8">
@@ -279,6 +322,8 @@ export default function ShopClient({ initialProducts }) {
 
   return (
     <div className="container mx-auto px-4 py-8">
+    
+
       <div className="flex flex-col gap-8">
        
 
@@ -321,27 +366,27 @@ export default function ShopClient({ initialProducts }) {
             </div> */}
           </div>
         </div>
- {/* Brand Details Section - Only show when brand is selected */}
- {selectedBrand && (
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="p-6">
-              <div className="flex flex-col md:flex-row justify-center items-center gap-1 md:gap-6  w-full">
-                <div className="relative w-36 h-36 bg-primary/10 rounded-lg mb-0 md:mb-0">
-                  <Image
-                    src={selectedBrand.logo}
-                    alt={selectedBrand.name}
-                    fill
-                    className="object-contain p-2"
-                  />
-                </div>
-                <div className="flex-1 text-center md:text-start">
-                  <h1 className="text-2xl font-bold mb-2 text-center md:text-start">{selectedBrand.name}</h1>
-                  <p className="text-gray-600 text-center md:text-start">{selectedBrand.longDescription}</p>
-                </div>
-              </div>
+  {/* Brand Description Section */}
+  {selectedBrand && (
+        <div className="mb-8 bg-white rounded-lg shadow-md p-6">
+          <div className="flex items-center gap-6 mb-4">
+            <div className="relative w-24 h-24">
+              <Image
+                src={selectedBrand.logo}
+                alt={selectedBrand.name}
+                fill
+                className="object-contain"
+              />
             </div>
+            <h1 className="text-3xl font-bold">{selectedBrand.name}</h1>
           </div>
-        )}
+          <div className="prose max-w-none">
+            <p className="text-gray-600 whitespace-pre-line">
+              {stripHtml(selectedBrand.longDescription || selectedBrand.description)}
+            </p>
+          </div>
+        </div>
+      )}
         {/* Products Grid */}
         <div className="flex-1">
           {error && (
@@ -360,7 +405,7 @@ export default function ShopClient({ initialProducts }) {
                     <div
                       key={product._id}
                       ref={index === products.length - 1 ? lastProductElementRef : null}
-                      className="bg-white rounded-lg shadow overflow-hidden"
+                      className="bg-white rounded-lg shadow overflow-hidden relative"
                     >
                       <Link 
                         href={`/product/${product._id}`}
@@ -395,7 +440,7 @@ export default function ShopClient({ initialProducts }) {
                               e.stopPropagation();
                               toggleFavorite(product._id);
                             }}
-                            className="text-gray-500 hover:text-red-500"
+                            className="text-gray-500 hover:text-red-500 absolute top-2 left-2"
                           >
                             <Heart
                               className={`w-5 h-5 ${

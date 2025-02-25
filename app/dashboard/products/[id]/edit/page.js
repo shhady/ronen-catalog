@@ -7,6 +7,14 @@ import Link from 'next/link';
 import { use } from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, X } from 'lucide-react';
+import dynamic from 'next/dynamic';
+
+const RichTextEditor = dynamic(() => import('@/components/RichTextEditor'), {
+  ssr: false,
+  loading: () => (
+    <div className="border rounded-lg overflow-hidden bg-white min-h-[300px] animate-pulse" />
+  ),
+});
 
 export default function EditProductPage({ params }) {
   const router = useRouter();
@@ -261,13 +269,11 @@ export default function EditProductPage({ params }) {
 
         <div>
           <label className="block text-sm font-medium mb-1">תיאור</label>
-          <textarea
+          <RichTextEditor
             value={formData.description}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, description: e.target.value }))
+            onChange={(value) =>
+              setFormData((prev) => ({ ...prev, description: value }))
             }
-            className="w-full p-2 border rounded"
-            rows={4}
           />
         </div>
 

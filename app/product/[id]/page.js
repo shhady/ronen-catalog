@@ -6,8 +6,9 @@ import { Heart, ArrowRight, Edit } from 'lucide-react';
 // import Product from '@/models/Product';
 // import connectDB from '@/lib/db';
 import { useProduct } from '@/contexts/ProductContext';
-import { useEffect, useState } from 'react';
-import { use } from 'react';
+import { useEffect, useState, use } from 'react';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 
 // export const revalidate = 60; // re-generate every 60 seconds
 
@@ -16,88 +17,108 @@ import { use } from 'react';
 //   return product;
 // }
 
+// Function to convert HTML to formatted text while preserving structure
+const stripHtml = (html) => {
+  if (!html) return '';
+  
+  // Create a temporary div
+  const tmp = document.createElement('DIV');
+  tmp.innerHTML = html;
+  
+  // Process block elements to add line breaks
+  const blockElements = ['p', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li'];
+  blockElements.forEach(tag => {
+    const elements = tmp.getElementsByTagName(tag);
+    for (let el of elements) {
+      el.innerHTML = el.innerHTML + '\n';
+    }
+  });
+
+  // Get text content and trim extra whitespace
+  let text = tmp.textContent || tmp.innerText || '';
+  return text.replace(/\n\s*\n/g, '\n').trim(); // Remove multiple consecutive line breaks
+};
+
 export default function ProductPage({ params }) {
-  // Properly unwrap the params promise using React.use()
   const { id } = use(params);
   const { selectedProduct } = useProduct();
   const [product, setProduct] = useState(selectedProduct);
-  const [error, setError] = useState(false);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [loadingRelated, setLoadingRelated] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    async function fetchProduct() {
-      if (!selectedProduct) {
-        try {
-          const response = await fetch(`/api/products/${id}`);
-          if (!response.ok) throw new Error('Failed to fetch product');
-          const data = await response.json();
-          setProduct(data);
-        } catch (err) {
-          setError(true);
-        }
-      }
-    }
-    
     if (!selectedProduct) {
+      // Only fetch product if not in context
       fetchProduct();
+    } else {
+      // If we have the product, just fetch related products
+      fetchRelatedProducts(selectedProduct.brandId);
     }
   }, [id, selectedProduct]);
 
-  if (error) {
-    return <div>המוצר לא נמצא</div>;
+  async function fetchProduct() {
+    try {
+      const res = await fetch(`/api/products/${id}`);
+      const data = await res.json();
+      setProduct(data);
+      fetchRelatedProducts(data.brandId);
+    } catch (error) {
+      console.error('Error fetching product:', error);
+    }
+  }
+
+  async function fetchRelatedProducts(brandId) {
+    if (!brandId) return;
+    
+    try {
+      setLoadingRelated(true);
+      const relatedRes = await fetch(`/api/products/brand/${brandId._id}?excludeId=${id}&limit=4`);
+      if (!relatedRes.ok) {
+        console.error('Failed to fetch related products');
+        return;
+      }
+      const relatedData = await relatedRes.json();
+      if (Array.isArray(relatedData)) {
+        setRelatedProducts(relatedData);
+      }
+    } catch (error) {
+      console.error('Error fetching related products:', error);
+    } finally {
+      setLoadingRelated(false);
+    }
   }
 
   if (!product) {
     return (
       <div className="container mx-auto px-4 py-8">
-        {/* Back to catalog link skeleton */}
-        <div className="mb-8">
-          <div className="flex items-center text-primary">
-            <div className="w-4 h-4 bg-gray-200 rounded mr-2"></div>
-            <div className="w-24 h-4 bg-gray-200 rounded"></div>
-          </div>
+        {/* Product Skeleton */}
+        <div className="mb-6">
+          <div className="w-24 h-10 bg-gray-200 rounded animate-pulse" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Product Image skeleton */}
-          <div className="relative h-96 bg-white rounded-lg overflow-hidden animate-pulse">
-            <div className="w-full h-full bg-gray-200"></div>
+          {/* Product Image Skeleton */}
+          <div className="relative h-96 bg-white rounded-lg overflow-hidden">
+            <div className="w-full h-full bg-gray-200 animate-pulse" />
           </div>
 
-          {/* Product Info skeleton */}
+          {/* Product Info Skeleton */}
           <div className="space-y-6">
             <div className="flex justify-between items-start">
               <div>
-                <div className="h-8 bg-gray-200 rounded w-64 mb-2"></div>
-                <div className="h-6 bg-gray-200 rounded w-40"></div>
+                <div className="h-8 bg-gray-200 rounded w-64 mb-2 animate-pulse" />
+                <div className="h-6 bg-gray-200 rounded w-40 animate-pulse" />
               </div>
             </div>
 
-            {/* Description skeleton */}
             <div className="space-y-4">
               <div>
-                <div className="h-6 bg-gray-200 rounded w-32 mb-2"></div>
-                <div className="h-20 bg-gray-200 rounded w-full"></div>
-              </div>
-            </div>
-
-            {/* Details skeleton */}
-            <div className="border-t pt-6">
-              <div className="grid grid-cols-2 gap-6 items-center">
-                <div className="pt-2">
-                  <div className="h-4 bg-gray-200 rounded w-24 mb-1"></div>
-                  <div className="h-5 bg-gray-200 rounded w-32"></div>
-                </div>
-                <div>
-                  <div className="h-4 bg-gray-200 rounded w-28 mb-1"></div>
-                  <div className="h-5 bg-gray-200 rounded w-16"></div>
-                </div>
-                <div>
-                  <div className="h-4 bg-gray-200 rounded w-24 mb-1"></div>
-                  <div className="h-5 bg-gray-200 rounded w-20"></div>
-                </div>
-                <div>
-                  <div className="h-4 bg-gray-200 rounded w-24 mb-1"></div>
-                  <div className="h-5 bg-gray-200 rounded w-24"></div>
+                <div className="h-6 bg-gray-200 rounded w-32 mb-2 animate-pulse" />
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-200 rounded w-full animate-pulse" />
+                  <div className="h-4 bg-gray-200 rounded w-full animate-pulse" />
+                  <div className="h-4 bg-gray-200 rounded w-3/4 animate-pulse" />
                 </div>
               </div>
             </div>
@@ -109,11 +130,16 @@ export default function ProductPage({ params }) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8 ">
-        <Link href="/shop" className="flex items-center text-primary hover:underline">
-          <ArrowRight className="w-4 h-4 ml-2" />
-          חזרה לקטלוג
-        </Link>
+      {/* Main product content */}
+      <div className="mb-6">
+        <Button
+          onClick={() => router.back()}
+          variant="ghost"
+          className="gap-2"
+        >
+          <ArrowRight className="w-4 h-4" />
+          חזור לקטלוג
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -152,9 +178,10 @@ export default function ProductPage({ params }) {
             <div className="space-y-4">
               <div>
                 <h2 className="text-lg font-semibold mb-2">תיאור המוצר</h2>
-                <p className="text-gray-600">
-                  {product.description}
-                </p>
+                <div 
+                  className="text-gray-600 prose max-w-none"
+                  dangerouslySetInnerHTML={{ __html: product.description }}
+                />
               </div>
             </div>
           )}
@@ -193,6 +220,54 @@ export default function ProductPage({ params }) {
           </div>
         </div>
       </div>
+
+      {/* Related Products Section */}
+      {loadingRelated ? (
+        <div className="mt-12">
+          <div className="h-8 bg-gray-200 rounded w-48 mb-6 animate-pulse" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map((item) => (
+              <div key={item} className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div className="relative h-48 bg-gray-200 animate-pulse" />
+                <div className="p-4">
+                  <div className="h-5 bg-gray-200 rounded w-3/4 mb-2 animate-pulse" />
+                  <div className="h-4 bg-gray-200 rounded w-1/2 animate-pulse" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : relatedProducts.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold mb-6">מוצרים דומים</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {relatedProducts.map((relatedProduct) => (
+              <Link
+                key={relatedProduct._id}
+                href={`/product/${relatedProduct._id}`}
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+              >
+                <div className="relative h-48">
+                  <Image
+                    src={relatedProduct.imageUrl || '/placeholder.png'}
+                    alt={relatedProduct.name}
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="font-semibold mb-2">{relatedProduct.name}</h3>
+                  {relatedProduct.weight && relatedProduct.weightUnit && (
+                    <p className="text-sm text-gray-600">
+                      {relatedProduct.weight} {relatedProduct.weightUnit}
+                    </p>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
