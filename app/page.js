@@ -29,19 +29,19 @@ export default async function HomePage() {
           />
           <div className="absolute inset-0 bg-black/40" />
         </div>
-        <div className="relative z-10 text-center text-white">
+        {/* <div className="relative z-10 text-center text-white">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
             ברוכים הבאים לקטלוג המוצרים שלנו
           </h1>
           <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto">
             גלו את המגוון הרחב של המוצרים האיכותיים שלנו
-          </p>
+          </p> */}
           {/* <Link href="/shop">
             <Button size="lg" className="text-lg bg-white text-black hover:bg-gray-100">
               לצפייה בקטלוג
             </Button>
           </Link> */}
-        </div>
+        {/* </div> */}
       </section>
 
       {/* Content Section */}<section className="pt-16 bg-gray-50">
