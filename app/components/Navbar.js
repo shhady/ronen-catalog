@@ -6,6 +6,10 @@ import Image from 'next/image';
 import { Search, ChevronDown, Menu, X } from 'lucide-react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useProduct } from '@/contexts/ProductContext';
+function stripHtml(html) {
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, '');
+}
 
 // Separate component for search functionality
 function SearchComponent() {
@@ -218,7 +222,7 @@ export default function Navbar() {
                           <Image src={brand.logo} alt={brand.name} width={20} height={20} className="object-contain rounded" />
                           {brand.name}
                         </div>
-                        <div className="text-gray-600 text-sm line-clamp-2">{brand.description}</div>
+                        <div className="text-gray-600 text-sm line-clamp-2">{stripHtml(brand.description)}</div>
                       </Link>
                     ))}
                   </div>
