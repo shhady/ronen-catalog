@@ -14,6 +14,7 @@ export default function HeroPage() {
   const [currentHero, setCurrentHero] = useState(null);
   const [newImageUrl, setNewImageUrl] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     fetchHero();
@@ -37,30 +38,42 @@ console.log(newImageUrl)
 
     try {
       setLoading(true);
+      setUploadProgress(0);
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', 'ronen-catalog');
       formData.append('folder', 'hero');
 
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error('Error uploading image: ' + errorData.error?.message || 'Unknown error');
-      }
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`);
       
-      const data = await res.json();
-      setNewImageUrl(data.secure_url);
-      setIsEditing(true);
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const progress = Math.round((event.loaded / event.total) * 100);
+          setUploadProgress(progress);
+        }
+      };
+
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const data = JSON.parse(xhr.response);
+          setNewImageUrl(data.secure_url);
+          setIsEditing(true);
+          setUploadProgress(0);
+        } else {
+          throw new Error('Upload failed');
+        }
+      };
+
+      xhr.onerror = () => {
+        throw new Error('Upload failed');
+      };
+
+      xhr.send(formData);
     } catch (error) {
       console.error('Upload error:', error);
       setError('אירעה שגיאה בהעלאת התמונה: ' + error.message);
+      setUploadProgress(0);
     } finally {
       setLoading(false);
     }
@@ -176,7 +189,6 @@ console.log(newImageUrl)
                         <span className="font-medium text-primary hover:text-primary/90">
                           העלה קובץ
                         </span>
-                        {/* <p className="pr-1">או גרור ושחרר</p> */}
                       </div>
                       <p className="text-xs text-gray-500">PNG, JPG עד 10MB</p>
                       <input
@@ -189,6 +201,17 @@ console.log(newImageUrl)
                         disabled={loading}
                       />
                     </label>
+                  )}
+                  {!newImageUrl && uploadProgress > 0 && (
+                    <div className="mt-4">
+                      <div className="w-full bg-gray-200 rounded-full h-2.5">
+                        <div 
+                          className="bg-primary h-2.5 rounded-full transition-all duration-300"
+                          style={{ width: `${uploadProgress}%` }}
+                        ></div>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-2">מעלה... {uploadProgress}%</p>
+                    </div>
                   )}
                 </div>
               </div>
