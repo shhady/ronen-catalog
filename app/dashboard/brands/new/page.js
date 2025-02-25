@@ -184,7 +184,7 @@ export default function NewBrandPage() {
                     </svg>
                     <div className="flex text-sm text-gray-600 justify-center">
                       <span className="font-medium text-primary hover:text-primary/90">העלה קובץ</span>
-                      <p className="pr-1">או גרור ושחרר</p>
+                      {/* <p className="pr-1">או גרור ושחרר</p> */}
                     </div>
                     <p className="text-xs text-gray-500">PNG, JPG עד 10MB</p>
                     <input
