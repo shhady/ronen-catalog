@@ -369,8 +369,8 @@ export default function ShopClient({ initialProducts }) {
   {/* Brand Description Section */}
   {selectedBrand && (
         <div className="mb-8 bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center gap-6 mb-4">
-            <div className="relative w-24 h-24">
+          <div className="flex flex-col md:flex-row items-center gap-6 mb-4">
+            <div className="relative w-32 h-32">
               <Image
                 src={selectedBrand.logo}
                 alt={selectedBrand.name}

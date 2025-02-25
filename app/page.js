@@ -24,7 +24,7 @@ export default async function HomePage() {
             fill
             sizes="100vw"
             priority
-            className="object-cover"
+            className="object-fill"
             quality={85}
           />
           <div className="absolute inset-0 bg-black/40" />

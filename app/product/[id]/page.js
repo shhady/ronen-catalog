@@ -138,7 +138,7 @@ export default function ProductPage({ params }) {
           className="gap-2"
         >
           <ArrowRight className="w-4 h-4" />
-          חזור 
+          חזור
         </Button>
       </div>
 
