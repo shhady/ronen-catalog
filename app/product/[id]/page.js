@@ -180,6 +180,7 @@ export default function ProductPage({ params }) {
                 <h2 className="text-lg font-semibold mb-2">תיאור המוצר</h2>
                 <div 
                   className="text-gray-600 prose max-w-none"
+                  
                   dangerouslySetInnerHTML={{ __html: product.description }}
                 />
               </div>

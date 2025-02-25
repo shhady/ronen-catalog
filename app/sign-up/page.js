@@ -86,11 +86,11 @@ export default function SignUpPage() {
     <div className=" flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-gray-50 py-8 rounded-xl shadow-lg">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          {/* <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             הרשמה למערכת
-          </h2>
+          </h2> */}
           <p className="mt-2 text-center text-sm text-gray-600">
-            כבר יש לך חשבון?{' '}
+            {/* כבר יש לך חשבון?{' '} */}
             <Link
               href="/sign-in"
               className="font-medium text-blue-600 hover:text-blue-500"
@@ -100,7 +100,7 @@ export default function SignUpPage() {
           </p>
         </div>
 
-        <form className="mt-8 space-y-6  " onSubmit={handleSubmit}>
+        {/* <form className="mt-8 space-y-6  " onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
@@ -196,7 +196,7 @@ export default function SignUpPage() {
           >
             {loading ? 'מבצע הרשמה...' : 'הרשמה'}
           </Button>
-        </form>
+        </form> */}
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { jwtVerify } from 'jose';
 
 export async function GET() {
   try {
-    const cookieStore =await cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get('token');
 
     if (!token) {
@@ -13,9 +13,13 @@ export async function GET() {
 
     // Verify the token
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-    await jwtVerify(token.value, secret);
+    const { payload } = await jwtVerify(token.value, secret);
 
-    return new NextResponse('OK', { status: 200 });
+    // Return success with user role
+    return NextResponse.json({ 
+      message: 'Authenticated',
+      role: payload.role 
+    }, { status: 200 });
   } catch (error) {
     console.error('Auth check error:', error);
     return new NextResponse('Unauthorized', { status: 401 });

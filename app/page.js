@@ -7,6 +7,13 @@ import PageViewTracker from './components/PageViewTracker';
 import Hero from './models/Hero';
 import connectDB from './lib/db';
 export const dynamic = 'force-dynamic';
+
+// Function to strip HTML tags for server-side rendering
+function stripHtml(html) {
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, '');
+}
+
 export default async function HomePage() {
   const brands = await getBrands();
   await connectDB();
@@ -86,7 +93,7 @@ export default async function HomePage() {
                   </div>
                   <h3 className="text-xl font-semibold mb-3">{brand.name}</h3>
                   <p className="text-gray-600 text-sm">
-                    {brand.description}
+                    {stripHtml(brand.description)}
                   </p>
                 </div>
               </Link>

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Plus, Pencil, Trash2, Search, X } from 'lucide-react';
+import { Plus, Pencil, Trash2, Search, X, LayoutGrid, LayoutList } from 'lucide-react';
 
 // Function to convert HTML to formatted text while preserving structure
 const stripHtml = (html) => {
@@ -186,52 +186,144 @@ export default function ProductsPage() {
         )}
       </div>
 
-      {/* Products Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product) => (
-          <div
-            key={product._id}
-            className="bg-white rounded-lg shadow overflow-hidden"
-          >
-            <div className="relative h-48">
-              {product.imageUrl && (
-                <Image
-                  src={product.imageUrl}
-                  alt={product.name}
-                  fill
-                  className="object-contain p-4"
-                />
-              )}
-            </div>
-            <div className="p-4">
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <h3 className="text-lg font-semibold">{product.name}</h3>
-                  <p className="text-gray-600 text-sm mt-1 line-clamp-3 whitespace-pre-line">
-                    {stripHtml(product.description)}
-                  </p>
+      {/* Products List/Grid */}
+      <div>
+        {/* Mobile Grid View */}
+        <div className="md:hidden grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {products.map((product) => (
+            <div
+              key={product._id}
+              className="bg-white rounded-lg shadow overflow-hidden"
+            >
+              <div className="relative h-48">
+                {product.imageUrl && (
+                  <Image
+                    src={product.imageUrl}
+                    alt={product.name}
+                    fill
+                    className="object-contain p-4"
+                  />
+                )}
+              </div>
+              <div className="p-4">
+                <div className="flex justify-between items-start mb-2">
+                  <div>
+                    <h3 className="text-lg font-semibold">{product.name}</h3>
+                    <p className="text-gray-600 text-sm mt-1 line-clamp-3 whitespace-pre-line">
+                      {stripHtml(product.description)}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <Link href={`/dashboard/products/${product._id}/edit`}>
+                    <Button size="sm" className="gap-2">
+                      <Pencil className="w-4 h-4" />
+                      ערוך
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => handleDelete(product._id)}
+                    className="gap-2"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    מחק
+                  </Button>
                 </div>
               </div>
-              <div className="flex gap-2 mt-4">
-                <Link href={`/dashboard/products/${product._id}/edit`}>
-                  <Button size="sm" className="gap-2">
-                    <Pencil className="w-4 h-4" />
-                    ערוך
-                  </Button>
-                </Link>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => handleDelete(product._id)}
-                  className="gap-2"
-                >
-                  <Trash2 className="w-4 h-4" />
-                  מחק
-                </Button>
-              </div>
             </div>
+          ))}
+        </div>
+
+        {/* Desktop List View */}
+        <div className="hidden md:block">
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    תמונה
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    שם המוצר
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    מותג
+                  </th>
+                  {/* <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    תיאור
+                  </th> */}
+                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    פרטים נוספים
+                  </th>
+                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    פעולות
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {products.map((product) => (
+                  <tr key={product._id}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="relative h-16 w-16">
+                        {product.imageUrl ? (
+                          <Image
+                            src={product.imageUrl}
+                            alt={product.name}
+                            fill
+                            className="object-contain"
+                          />
+                        ) : (
+                          <div className="h-16 w-16 bg-gray-100 flex items-center justify-center text-gray-400">
+                            אין תמונה
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm font-medium text-gray-900">{product.name}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-gray-900">{product.brandId?.name || 'ללא מותג'}</div>
+                    </td>
+                    {/* <td className="px-6 py-4">
+                      <div className="text-sm text-gray-500 max-w-xs line-clamp-2 whitespace-pre-line">
+                        {stripHtml(product.description)}
+                      </div>
+                    </td> */}
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-gray-500">
+                        <p>יחידות: {product.units || 'לא צוין'}</p>
+                        <p>משקל: {product.weight ? `${product.weight} ${product.weightUnit}` : 'לא צוין'}</p>
+                        {/* <p>ברקוד: {product.barCode || 'לא צוין'}</p> */}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm font-medium">
+                      <div className="flex gap-2">
+                        <Link href={`/dashboard/products/${product._id}/edit`}>
+                          <Button size="sm" className="gap-2">
+                            <Pencil className="w-4 h-4" />
+                            ערוך
+                          </Button>
+                        </Link>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => handleDelete(product._id)}
+                          className="gap-2"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          מחק
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        ))}
+        </div>
       </div>
 
       {products.length === 0 && (

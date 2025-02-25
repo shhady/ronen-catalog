@@ -125,23 +125,38 @@ export default function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     fetchBrands();
     checkAuthStatus();
-    // Close mobile menu when pathname changes
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
   const checkAuthStatus = async () => {
     try {
+      setIsLoading(true);
       const res = await fetch('/api/auth/check', {
         credentials: 'include'
       });
-      setIsAuthenticated(res.ok);
+      
+      if (res.ok) {
+        const data = await res.json();
+        setIsAuthenticated(true);
+        setIsAdmin(data.role === 'admin');
+      } else {
+        setIsAuthenticated(false);
+        setIsAdmin(false);
+      }
     } catch (error) {
       console.error('Error checking auth status:', error);
       setIsAuthenticated(false);
+      setIsAdmin(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -171,30 +186,14 @@ export default function Navbar() {
               height={80}
               className="object-contain"
             />
-            </Link>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center justify-between flex-1 mr-8">
-            <div className="flex items-center  gap-4">
-              <Link 
-                href="/" 
-                className="text-gray-900 hover:text-gray-600 transition-colors font-medium"
-              >
-                דף הבית
-              </Link>
-              <Link 
-                href="/about" 
-                className="text-gray-900 hover:text-gray-600 transition-colors font-medium"
-              >
-                אודות
-              </Link>
-            
-              <Link 
-                href="/favorites" 
-                className="text-gray-900 hover:text-gray-600 transition-colors font-medium"
-              >
-                מועדפים
-              </Link>
+            <div className="flex items-center gap-4">
+              <Link href="/" className="text-gray-900 hover:text-gray-600 transition-colors font-medium">דף הבית</Link>
+              <Link href="/about" className="text-gray-900 hover:text-gray-600 transition-colors font-medium">אודות</Link>
+              <Link href="/favorites" className="text-gray-900 hover:text-gray-600 transition-colors font-medium">מועדפים</Link>
              
               {/* Categories Dropdown */}
               <div className="relative">
@@ -215,16 +214,17 @@ export default function Navbar() {
                         className="block px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0"
                         onClick={() => setIsDropdownOpen(false)}
                       >
-                        
-
-                        <div className="text-gray-900 font-medium mb-1 flex items-center gap-2"><Image src={brand.logo} alt={brand.name} width={20} height={20} className="object-contain rounded" />{brand.name}</div>
+                        <div className="text-gray-900 font-medium mb-1 flex items-center gap-2">
+                          <Image src={brand.logo} alt={brand.name} width={20} height={20} className="object-contain rounded" />
+                          {brand.name}
+                        </div>
                         <div className="text-gray-600 text-sm line-clamp-2">{brand.description}</div>
                       </Link>
                     ))}
                   </div>
                 )}
               </div>
-              {isAuthenticated && (
+              {mounted && !isLoading && isAuthenticated && isAdmin && (
                 <Link 
                   href="/dashboard" 
                   className="text-gray-900 hover:text-gray-600 transition-colors font-medium"
@@ -232,7 +232,6 @@ export default function Navbar() {
                   לוח בקרה
                 </Link>
               )}
-              
             </div>
 
             {/* Search Component wrapped in Suspense */}
@@ -256,58 +255,43 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden bg-white border-t border-gray-200">
-            <div className="px-4 py-6 space-y-4">
+          <div className="lg:hidden py-4 border-t border-gray-100">
+            <div className="flex flex-col space-y-4">
+              <Link 
+                href="/" 
+                className="text-gray-900 hover:text-gray-600 transition-colors font-medium"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                דף הבית
+              </Link>
+              <Link 
+                href="/about" 
+                className="text-gray-900 hover:text-gray-600 transition-colors font-medium"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                אודות
+              </Link>
+              <Link 
+                href="/favorites" 
+                className="text-gray-900 hover:text-gray-600 transition-colors font-medium"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                מועדפים
+              </Link>
+              {mounted && !isLoading && isAuthenticated && isAdmin && (
+                <Link 
+                  href="/dashboard" 
+                  className="text-gray-900 hover:text-gray-600 transition-colors font-medium"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  לוח בקרה
+                </Link>
+              )}
               {/* Mobile Search */}
-              <Suspense fallback={<div className="w-full h-10 bg-gray-100 rounded-lg animate-pulse" />}>
-                <SearchComponent />
-              </Suspense>
-
-              {/* Mobile Navigation Links */}
-              <div className="flex flex-col space-y-4">
-                <Link
-                  href="/"
-                  className="text-gray-900 hover:text-gray-600 transition-colors font-medium"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  דף הבית
-                </Link>
-                <Link
-                  href="/favorites"
-                  className="text-gray-900 hover:text-gray-600 transition-colors font-medium"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  מועדפים
-                </Link>
-                {isAuthenticated && (
-                  <Link
-                    href="/dashboard"
-                    className="text-gray-900 hover:text-gray-600 transition-colors font-medium"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    לוח בקרה
-                  </Link>
-                )}
-
-                {/* Mobile Brands */}
-                <div className="space-y-2">
-                  <h3 className="font-medium text-gray-900">מותגים</h3>
-                  <div className="space-y-2">
-                    {brands?.map((brand) => (
-                      <Link
-                        key={brand._id}
-                        href={`/shop?brand=${brand._id}`}
-                        className="block py-2 text-gray-600 hover:text-gray-900 transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        <div className="flex items-center gap-2">
-                          <Image src={brand.logo} alt={brand.name} width={20} height={20} className="object-contain rounded" />
-                          {brand.name}
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
+              <div className="pt-4">
+                <Suspense fallback={<div className="w-full h-10 bg-gray-100 rounded-lg animate-pulse" />}>
+                  <SearchComponent />
+                </Suspense>
               </div>
             </div>
           </div>

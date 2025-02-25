@@ -21,6 +21,15 @@ export async function middleware(request) {
     '/favicon.ico'
   ];
 
+  // Admin-only routes
+  const adminRoutes = [
+    '/dashboard',
+    '/api/brands/((?!public).)*', // All brand routes except /public
+    '/api/products/create',
+    '/api/products/update',
+    '/api/products/delete',
+  ];
+
   // Check if the route is public
   const isPublicRoute = publicRoutes.some(route => {
     if (route.includes('(.*)')) {
@@ -52,9 +61,28 @@ export async function middleware(request) {
   }
 
   try {
-    // Verify token
+    // Verify token and get payload
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-    await jwtVerify(token, secret);
+    const { payload } = await jwtVerify(token, secret);
+
+    // Check if route requires admin access
+    const isAdminRoute = adminRoutes.some(route => {
+      if (route.includes('(.*)')) {
+        const baseRoute = route.replace('(.*)', '');
+        return request.nextUrl.pathname.startsWith(baseRoute);
+      }
+      return request.nextUrl.pathname.startsWith(route);
+    });
+
+    if (isAdminRoute && payload.role !== 'admin') {
+      // If it's an API route, return 403 Forbidden
+      if (request.nextUrl.pathname.startsWith('/api/')) {
+        return NextResponse.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
+      }
+      // For other routes, redirect to home page
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+
     return NextResponse.next();
   } catch (error) {
     // If it's an API route, return 401
