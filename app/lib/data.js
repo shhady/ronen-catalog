@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 export async function getBrands() {
   try {
     await dbConnect();
-    const brands = await Brand.find({ status: 'shown' }).sort({ createdAt: -1 });
+    const brands = await Brand.find({ status: 'shown' }).sort({ createdAt: 1 });
     // Convert _id to string and remove any MongoDB-specific fields
     return brands.map(brand => ({
       _id: brand._id.toString(),
