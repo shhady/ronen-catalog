@@ -24,7 +24,7 @@ async function verifyAuth(request) {
 export async function GET() {
   try {
     await connectDB();
-    const brands = await Brand.find({ status: 'shown' }).sort({ createdAt: -1 });
+    const brands = await Brand.find({ status: 'shown' }).sort({ createdAt: 1 });
     return NextResponse.json(brands);
   } catch (error) {
     console.error('Error fetching brands:', error);

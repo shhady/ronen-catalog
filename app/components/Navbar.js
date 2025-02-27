@@ -70,7 +70,7 @@ function SearchComponent() {
   };
 
   return (
-    <div className="relative max-w-md w-full mx-4">
+    <div className="relative max-w-md w-full">
       <form onSubmit={handleSearch}>
         <div className="relative">
           <input
@@ -128,6 +128,7 @@ export default function Navbar() {
   const [brands, setBrands] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isBrandsOpen, setIsBrandsOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -261,6 +262,12 @@ export default function Navbar() {
         {isMobileMenuOpen && (
           <div className="lg:hidden py-4 border-t border-gray-100">
             <div className="flex flex-col space-y-4">
+               {/* Mobile Search */}
+               <div className="pt-4">
+                <Suspense fallback={<div className="w-full h-10 bg-gray-100 rounded-lg animate-pulse" />}>
+                  <SearchComponent />
+                </Suspense>
+              </div>
               <Link 
                 href="/" 
                 className="text-gray-900 hover:text-gray-600 transition-colors font-medium"
@@ -291,12 +298,40 @@ export default function Navbar() {
                   לוח בקרה
                 </Link>
               )}
-              {/* Mobile Search */}
-              <div className="pt-4">
-                <Suspense fallback={<div className="w-full h-10 bg-gray-100 rounded-lg animate-pulse" />}>
-                  <SearchComponent />
-                </Suspense>
+              
+              {/* Mobile Brands Menu */}
+              <div className="border-t border-gray-100 pt-4">
+                <div 
+                  onClick={() => setIsBrandsOpen(!isBrandsOpen)} 
+                  className="flex items-center justify-between cursor-pointer py-2"
+                >
+                  <h2 className="text-gray-900 font-medium">מותגים</h2>
+                  <ChevronDown className={`w-5 h-5 transition-transform ${isBrandsOpen ? 'rotate-180' : ''}`} />
+                </div>
+                
+                {isBrandsOpen && (
+                  <div className="mt-2 space-y-2">
+                    {brands?.map((brand) => (
+                      <Link
+                        key={brand._id}
+                        href={`/shop?brand=${brand._id}`}
+                        className="block px-4 py-2 hover:bg-gray-50 transition-colors rounded-lg"
+                        onClick={() => {
+                          setIsBrandsOpen(false);
+                          setIsMobileMenuOpen(false);
+                        }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Image src={brand.logo} alt={brand.name} width={20} height={20} className="object-contain rounded" />
+                          <span>{brand.name}</span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
+
+             
             </div>
           </div>
         )}
