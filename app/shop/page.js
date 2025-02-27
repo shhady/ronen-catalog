@@ -5,7 +5,6 @@ export const dynamic = 'force-dynamic';
 export default async function ShopPage() {
   await connectDB();
   const initialProducts = await Product.find()
-    .limit(20)
     .sort({ createdAt: -1 })
     .populate('brandId', 'name logo');
 

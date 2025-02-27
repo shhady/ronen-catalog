@@ -15,6 +15,7 @@ export async function middleware(request) {
     '/api/products',
     '/api/products/(.*)',
     '/api/brands',
+    '/api/brands/(.*)',
     '/api/brands/public',
     '/favorites',
     '/_next/static/(.*)',

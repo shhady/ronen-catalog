@@ -196,6 +196,13 @@ export default function ShopClient({ initialProducts }) {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
     setPage(1);
+    
+    // If clearing brand filter (selecting כל המותגים), remove brand and query params
+    if (key === 'brand' && value === '') {
+      router.push('/shop');
+      return;
+    }
+    
     const queryParams = new URLSearchParams(newFilters);
     router.push(`/shop?${queryParams}`);
   };
@@ -247,6 +254,7 @@ export default function ShopClient({ initialProducts }) {
       if (!res.ok) throw new Error('Failed to fetch brand details');
       const data = await res.json();
       setSelectedBrand(data);
+      console.log(data)
     } catch (error) {
       console.error('Error fetching brand details:', error);
     }
