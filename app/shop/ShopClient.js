@@ -254,7 +254,7 @@ export default function ShopClient({ initialProducts }) {
       if (!res.ok) throw new Error('Failed to fetch brand details');
       const data = await res.json();
       setSelectedBrand(data);
-      console.log(data)
+    
     } catch (error) {
       console.error('Error fetching brand details:', error);
     }

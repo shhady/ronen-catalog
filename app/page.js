@@ -18,7 +18,7 @@ export default async function HomePage() {
   const brands = await getBrands();
   await connectDB();
   const heroImage = await Hero.find();
-  console.log(heroImage);
+  // console.log(heroImage);
   return (
     <div className="min-h-screen">
       <PageViewTracker />

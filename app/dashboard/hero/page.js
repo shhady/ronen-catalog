@@ -19,7 +19,7 @@ export default function HeroPage() {
   useEffect(() => {
     fetchHero();
   }, []);
-console.log(newImageUrl)
+// console.log(newImageUrl)
   const fetchHero = async () => {
     try {
       const res = await fetch('/api/hero');
