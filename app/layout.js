@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import ScrollToTop from './components/ScrollToTop';
 import { ProductProvider } from '@/contexts/ProductContext';
+import AccessibilityWidget from './components/AccessibilityWidget';
 import Head from 'next/head';
 
 const rubik = Rubik({
@@ -17,7 +18,7 @@ const rubik = Rubik({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://www.cicilialtd.com/'),
+  metadataBase: new URL('https://www.cicilialtd.com'),
   title: {
     default: 'Cicilia Import - קטלוג מוצרים',
     template: '%s | Cicilia Import'
@@ -27,7 +28,7 @@ export const metadata = {
   openGraph: {
     type: 'website',
     locale: 'he_IL',
-    url: 'https://www.cicilialtd.com/',
+    url: 'https://www.cicilialtd.com',
     siteName: 'Cicilia Import',
     images: [{
       url: '/hero1.jpg',
@@ -57,7 +58,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="he" dir="rtl">
-        <Head>
+         <Head>
         <title>{metadata.title.default}</title>
         <meta name="description" content={metadata.description} />
         <meta name="keywords" content={metadata.keywords.join(', ')} />
@@ -79,6 +80,7 @@ export default function RootLayout({ children }) {
             </main>
             <Footer />
             <WhatsAppButton />
+            <AccessibilityWidget />
           </Suspense>
           {/* </Providers> */}
         </ProductProvider>

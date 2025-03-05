@@ -38,3 +38,38 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Accessibility Styles */
+/* מצב ניגודיות גבוהה */
+body.high-contrast, 
+body.high-contrast *:not(#accessibility-root *) {
+  background-color: #000 !important;
+  color: #fff !important;
+  border-color: white !important;
+}
+
+body.high-contrast a:not(#accessibility-root *), 
+body.high-contrast a:visited:not(#accessibility-root *),
+body.high-contrast button:not(#accessibility-root *) {
+  color: #0ff !important;
+  text-decoration: underline !important;
+  border: 1px solid #0ff !important;
+}
+
+/* מצב גווני אפור */
+body.grayscale {
+  filter: grayscale(100%);
+}
+
+/* הדגשת קישורים */
+body.highlight-links a:not(#accessibility-root *) {
+  background-color: yellow !important;
+  color: #000 !important;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* סימון פוקוס מודגש (במצב ניווט מקלדת) */
+body.keyboard-nav *:focus:not(#accessibility-root *) {
+  outline: 3px solid red !important;
+}
