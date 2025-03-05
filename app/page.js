@@ -17,8 +17,9 @@ function stripHtml(html) {
 export default async function HomePage() {
   const brands = await getBrands();
   await connectDB();
-  const heroImage = await Hero.find();
-  // console.log(heroImage);
+  const heroData = await Hero.findOne().sort({ createdAt: -1 });
+  const heroImageUrl = heroData?.imageUrl || '/hero1.jpg'; // Fallback to static image if no DB image
+  
   return (
     <div className="min-h-screen">
       <PageViewTracker />
@@ -26,13 +27,14 @@ export default async function HomePage() {
       <section className="relative h-[50vh] flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/10">
         <div className="absolute inset-0 z-0">
           <Image
-            src={heroImage[0].imageUrl}
+            src={heroImageUrl}
             alt="Hero Background"
             fill
             sizes="100vw"
             priority
             className="object-cover 2xl:object-contain "
-            quality={100}
+            quality={100} 
+            unoptimized
           />
           {/* <div className="absolute inset-0 bg-black/40" /> */}
         </div>
