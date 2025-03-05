@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import WhatsAppButton from './components/WhatsAppButton';
 import ScrollToTop from './components/ScrollToTop';
 import { ProductProvider } from '@/contexts/ProductContext';
+import Head from 'next/head';
 
 const rubik = Rubik({
   subsets: ['hebrew'],
@@ -16,13 +17,57 @@ const rubik = Rubik({
 });
 
 export const metadata = {
-  title: 'Cicilia Import',
-  description: 'קטלוג מוצרים של Cicilia Import',
+  metadataBase: new URL('https://ronen-catalog.vercel.app/'),
+  title: {
+    default: 'Cicilia Import - קטלוג מוצרים',
+    template: '%s | Cicilia Import'
+  },
+  description: 'קטלוג מוצרים איכותיים של Cicilia Import - מגוון רחב של מותגים ומוצרים',
+  keywords: ['קטלוג מוצרים', 'מוצרי יבוא', 'מותגים', 'Cicilia Import'],
+  openGraph: {
+    type: 'website',
+    locale: 'he_IL',
+    url: 'https://ronen-catalog.vercel.app/',
+    siteName: 'Cicilia Import',
+    images: [{
+      url: '/hero1.jpg',
+      width: 1200,
+      height: 630,
+      alt: 'Cicilia Import Catalog Preview',
+    }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Cicilia Import - קטלוג מוצרים",
+    description: "מגוון רחב של מוצרים איכותיים מהמותגים המובילים",
+    images: ["/hero1.jpg"], 
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  manifest: '/manifest.json',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+    shortcut: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="he" dir="rtl">
+        <Head>
+        <title>{metadata.title.default}</title>
+        <meta name="description" content={metadata.description} />
+        <meta name="keywords" content={metadata.keywords.join(', ')} />
+        <meta name="robots" content="index, follow" />
+        <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="manifest" href={metadata.manifest} />
+      </Head>
       <body className={`${rubik.className} bg-white text-gray-900 flex flex-col min-h-screen`}>
         <ScrollToTop />
         <ProductProvider>
