@@ -23,7 +23,7 @@ export default async function HomePage() {
     <div className="min-h-screen">
       <PageViewTracker />
       {/* Hero Section */}
-      <section className="relative h-[60vh] flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/10">
+      <section className="relative h-[50vh] flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/10">
         <div className="absolute inset-0 z-0">
           <Image
             src={heroImage[0].imageUrl}
@@ -32,7 +32,7 @@ export default async function HomePage() {
             sizes="100vw"
             priority
             className="object-cover"
-            quality={85}
+            quality={100}
           />
           {/* <div className="absolute inset-0 bg-black/40" /> */}
         </div>
