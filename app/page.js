@@ -24,10 +24,10 @@ export default async function HomePage() {
     <div className="min-h-screen">
       <PageViewTracker />
       {/* Hero Section */}
-      <section className="relative h-[50vh] flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/10">
+      <section className="relative h-[50vh] flex items-center justify-center ">
         <div className="absolute inset-0 z-0">
           <Image
-            src={'/hero1.jpg'}
+            src={heroImageUrl}
             alt="Hero Background"
             fill
             sizes="100vw"
