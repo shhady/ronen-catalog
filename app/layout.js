@@ -17,7 +17,7 @@ const rubik = Rubik({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://ronen-catalog.vercel.app/'),
+  metadataBase: new URL('https://www.cicilialtd.com/'),
   title: {
     default: 'Cicilia Import - קטלוג מוצרים',
     template: '%s | Cicilia Import'
@@ -27,7 +27,7 @@ export const metadata = {
   openGraph: {
     type: 'website',
     locale: 'he_IL',
-    url: 'https://ronen-catalog.vercel.app/',
+    url: 'https://www.cicilialtd.com/',
     siteName: 'Cicilia Import',
     images: [{
       url: '/hero1.jpg',
