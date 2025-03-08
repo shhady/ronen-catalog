@@ -91,8 +91,14 @@ export default function Footer() {
           <p className="text-sm">
             © {new Date().getFullYear()} Cicilia Import
           </p>
-        </div>
+        
       </div>
+      <p dir="rtl" className='text-center'>
+    <a href="https://fikranova.com" target="_blank" rel="dofollow" title="פותח על ידי fikranova.com">
+      פותח על ידי <span className='text-blue-400'>Fikranova</span>
+    </a>
+  </p>
+  </div>
     </footer>
   );
 } 
