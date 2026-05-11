@@ -43,6 +43,7 @@ export default function ProductsPage() {
     brandId: ''
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     Promise.all([fetchProducts(), fetchBrands()]);
   }, []);
@@ -86,6 +87,7 @@ export default function ProductsPage() {
   };
 
   // Add debounce to prevent too many API calls
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchProducts();

@@ -35,51 +35,51 @@ export default function EditProductPage({ params }) {
   });
 
   useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`/api/products/${id}`, {
+          credentials: 'include'
+        });
+        if (!res.ok) {
+          throw new Error('Failed to fetch product');
+        }
+        const product = await res.json();
+        setFormData({
+          name: product.name,
+          description: product.description || '',
+          brandId: product.brandId?._id || product.brandId || '',
+          country: product.country || '',
+          imageUrl: product.imageUrl || '',
+          units: product.units || '',
+          weight: product.weight || '',
+          weightUnit: product.weightUnit || '',
+        });
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        setError('אירעה שגיאה בטעינת המוצר');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchBrands = async () => {
+      try {
+        const res = await fetch('/api/brands', {
+          credentials: 'include'
+        });
+        if (!res.ok) {
+          throw new Error('Failed to fetch brands');
+        }
+        const data = await res.json();
+        setBrands(data);
+      } catch (error) {
+        console.error('Error fetching brands:', error);
+        setError('אירעה שגיאה בטעינת המותגים');
+      }
+    };
+
     Promise.all([fetchProduct(), fetchBrands()]);
   }, [id]);
-
-  const fetchProduct = async () => {
-    try {
-      const res = await fetch(`/api/products/${id}`, {
-        credentials: 'include'
-      });
-      if (!res.ok) {
-        throw new Error('Failed to fetch product');
-      }
-      const product = await res.json();
-      setFormData({
-        name: product.name,
-        description: product.description || '',
-        brandId: product.brandId?._id || product.brandId || '',
-        country: product.country || '',
-        imageUrl: product.imageUrl || '',
-        units: product.units || '',
-        weight: product.weight || '',
-        weightUnit: product.weightUnit || '',
-      });
-    } catch (error) {
-      console.error('Error fetching product:', error);
-      setError('אירעה שגיאה בטעינת המוצר');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchBrands = async () => {
-    try {
-      const res = await fetch('/api/brands', {
-        credentials: 'include'
-      });
-      if (!res.ok) {
-        throw new Error('Failed to fetch brands');
-      }
-      const data = await res.json();
-      setBrands(data);
-    } catch (error) {
-      console.error('Error fetching brands:', error);
-      setError('אירעה שגיאה בטעינת המותגים');
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -271,7 +271,7 @@ export default function EditProductPage({ params }) {
               className="w-full p-2 border rounded"
             >
               <option value="">בחר יחידת משקל</option>
-              <option value='ק"ג'>ק"ג</option>
+              <option value='ק"ג'>{'ק"ג'}</option>
               <option value="גרם">גרם</option>
               <option value="ליטר">ליטר</option>
               <option value="מ״ל">מ״ל</option>

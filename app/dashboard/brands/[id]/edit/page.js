@@ -30,31 +30,30 @@ export default function EditBrandPage({ params }) {
   });
 
   useEffect(() => {
-    fetchBrand();
-  }, []);
-
-  const fetchBrand = async () => {
-    try {
-      const res = await fetch(`/api/brands/${id}`, {
-        credentials: 'include'
-      });
-      if (!res.ok) {
-        throw new Error('Failed to fetch brand');
+    const fetchBrand = async () => {
+      try {
+        const res = await fetch(`/api/brands/${id}`, {
+          credentials: 'include'
+        });
+        if (!res.ok) {
+          throw new Error('Failed to fetch brand');
+        }
+        const data = await res.json();
+        setFormData({
+          name: data.name,
+          description: data.description,
+          longDescription: data.longDescription,
+          logo: data.logo,
+        });
+      } catch (error) {
+        console.error('Error fetching brand:', error);
+        setError('אירעה שגיאה בטעינת המותג');
+      } finally {
+        setLoading(false);
       }
-      const data = await res.json();
-      setFormData({
-        name: data.name,
-        description: data.description,
-        longDescription: data.longDescription,
-        logo: data.logo,
-      });
-    } catch (error) {
-      console.error('Error fetching brand:', error);
-      setError('אירעה שגיאה בטעינת המותג');
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+    fetchBrand();
+  }, [id]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

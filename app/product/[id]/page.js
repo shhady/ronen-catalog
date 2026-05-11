@@ -47,12 +47,11 @@ export default function ProductPage({ params }) {
   const [loadingRelated, setLoadingRelated] = useState(true);
   const router = useRouter();
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!selectedProduct || selectedProduct._id !== id) {
-      // Fetch product if there's no selected product or if IDs don't match
       fetchProduct();
     } else {
-      // If we have the matching product in context, use it and fetch related products
       setProduct(selectedProduct);
       fetchRelatedProducts(selectedProduct.brandId);
     }

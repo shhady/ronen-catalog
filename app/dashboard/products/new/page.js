@@ -222,7 +222,7 @@ export default function NewProductPage() {
               className="w-full p-2 border rounded"
             >
               <option value="">בחר יחידת משקל</option>
-              <option value='ק"ג'>ק"ג</option>
+              <option value='ק"ג'>{'ק"ג'}</option>
               <option value="גרם">גרם</option>
               <option value="ליטר">ליטר</option>
               <option value="מ״ל">מ״ל</option>

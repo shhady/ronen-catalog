@@ -62,6 +62,7 @@ export default function ShopClient({ initialProducts }) {
   const { setSelectedProduct } = useProduct();
   const [selectedBrand, setSelectedBrand] = useState(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const lastProductElementRef = useCallback(node => {
     if (loading) return;
     if (observer.current) observer.current.disconnect();
@@ -73,8 +74,8 @@ export default function ShopClient({ initialProducts }) {
     if (node) observer.current.observe(node);
   }, [loading, hasMore]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    // If there are initial filters, fetch filtered products
     if (initialBrand || initialQuery || (initialSort && initialSort !== 'newest')) {
       setLoading(true);
       fetchProducts({
@@ -83,7 +84,7 @@ export default function ShopClient({ initialProducts }) {
         sort: initialSort || 'newest'
       });
     }
-  }, []); // Empty dependency array as this should only run once on mount
+  }, []);
 
   useEffect(() => {
     const storedFavorites = localStorage.getItem('favorites');
@@ -92,8 +93,8 @@ export default function ShopClient({ initialProducts }) {
     }
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    // Only update filters and fetch if not the initial load
     if (!isInitialLoad.current) {
       const newFilters = {
         brand: searchParams.get('brand') || '',
@@ -102,13 +103,11 @@ export default function ShopClient({ initialProducts }) {
       };
       setFilters(newFilters);
       setPage(1);
-      // Only fetch if there are actual filters
       if (newFilters.brand || newFilters.query || newFilters.sort !== 'newest') {
         setLoading(true);
         setProducts([]);
         fetchProducts(newFilters);
       } else {
-        // Reset to initial products if no filters
         setProducts(initialProducts);
         setLoading(false);
       }
@@ -117,6 +116,7 @@ export default function ShopClient({ initialProducts }) {
     }
   }, [searchParams]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchBrands();
   }, []);

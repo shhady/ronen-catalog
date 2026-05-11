@@ -32,8 +32,15 @@ function SearchComponent() {
       clearTimeout(searchTimeoutRef.current);
     }
 
-    searchTimeoutRef.current = setTimeout(() => {
-      fetchSearchResults();
+    searchTimeoutRef.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/products?query=${encodeURIComponent(searchQuery)}`);
+        const data = await res.json();
+        setSearchResults(data);
+        setShowSearchDropdown(true);
+      } catch (error) {
+        console.error('Error fetching search results:', error);
+      }
     }, 300);
 
     return () => {
@@ -42,17 +49,6 @@ function SearchComponent() {
       }
     };
   }, [searchQuery]);
-
-  const fetchSearchResults = async () => {
-    try {
-      const res = await fetch(`/api/products?query=${encodeURIComponent(searchQuery)}`);
-      const data = await res.json();
-      setSearchResults(data);
-      setShowSearchDropdown(true);
-    } catch (error) {
-      console.error('Error fetching search results:', error);
-    }
-  };
 
   const handleSearch = (e) => {
     e.preventDefault();
