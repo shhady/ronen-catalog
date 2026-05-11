@@ -43,9 +43,9 @@ export default function ProductsPage() {
     brandId: ''
   });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     Promise.all([fetchProducts(), fetchBrands()]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchBrands = async () => {
@@ -86,13 +86,12 @@ export default function ProductsPage() {
     }
   };
 
-  // Add debounce to prevent too many API calls
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchProducts();
     }, 300);
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters]);
 
   const handleFilterChange = (key, value) => {

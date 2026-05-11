@@ -62,7 +62,6 @@ export default function ShopClient({ initialProducts }) {
   const { setSelectedProduct } = useProduct();
   const [selectedBrand, setSelectedBrand] = useState(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const lastProductElementRef = useCallback(node => {
     if (loading) return;
     if (observer.current) observer.current.disconnect();
@@ -72,9 +71,9 @@ export default function ShopClient({ initialProducts }) {
       }
     });
     if (node) observer.current.observe(node);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, hasMore]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (initialBrand || initialQuery || (initialSort && initialSort !== 'newest')) {
       setLoading(true);
@@ -84,6 +83,7 @@ export default function ShopClient({ initialProducts }) {
         sort: initialSort || 'newest'
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -93,7 +93,6 @@ export default function ShopClient({ initialProducts }) {
     }
   }, []);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!isInitialLoad.current) {
       const newFilters = {
@@ -114,11 +113,12 @@ export default function ShopClient({ initialProducts }) {
     } else {
       isInitialLoad.current = false;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchBrands();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

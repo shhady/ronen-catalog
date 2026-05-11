@@ -643,6 +643,7 @@ export default function AccessibilityWidget() {
     container.appendChild(renderToggleButton());
     container.appendChild(renderMenu());
     container.appendChild(renderModal());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, currentFontSize, highContrast, grayscale, highlightLinks, keyboardNav, fullAccess, isModalOpen]);
 
   // This component doesn't render anything in the React tree

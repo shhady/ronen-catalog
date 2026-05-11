@@ -47,7 +47,6 @@ export default function ProductPage({ params }) {
   const [loadingRelated, setLoadingRelated] = useState(true);
   const router = useRouter();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!selectedProduct || selectedProduct._id !== id) {
       fetchProduct();
@@ -55,6 +54,7 @@ export default function ProductPage({ params }) {
       setProduct(selectedProduct);
       fetchRelatedProducts(selectedProduct.brandId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, selectedProduct]);
 
   async function fetchProduct() {
