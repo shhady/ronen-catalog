@@ -79,10 +79,12 @@ function SearchComponent() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+            suppressHydrationWarning
           />
           <button
             type="submit"
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+            suppressHydrationWarning
           >
             <Search className="w-5 h-5" />
           </button>
