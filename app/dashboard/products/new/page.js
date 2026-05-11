@@ -89,7 +89,7 @@ export default function NewProductPage() {
       setUploadProgress(0);
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('upload_preset', 'ronen-catalog');
+      formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_PRESET);
       formData.append('folder', 'products');
 
       const xhr = new XMLHttpRequest();

@@ -75,7 +75,7 @@ export default function EditBrandPage({ params }) {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.message || 'אירעה שגיאה בעדכון המותג');
+        throw new Error(data.error || data.message || 'אירעה שגיאה בעדכון המותג');
       }
 
       router.push('/dashboard/brands');
@@ -95,7 +95,7 @@ export default function EditBrandPage({ params }) {
       setUploadProgress(0);
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('upload_preset', 'ronen-catalog');
+      formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_PRESET);
       formData.append('folder', 'brands');
 
       const xhr = new XMLHttpRequest();
@@ -114,12 +114,14 @@ export default function EditBrandPage({ params }) {
           setFormData((prev) => ({ ...prev, logo: data.secure_url }));
           setUploadProgress(0);
         } else {
-          throw new Error('Upload failed');
+          setError('העלאת הלוגו נכשלה — בדוק את הגדרות Cloudinary');
+          setUploadProgress(0);
         }
       };
 
       xhr.onerror = () => {
-        throw new Error('Upload failed');
+        setError('העלאת הלוגו נכשלה — בדוק את הגדרות Cloudinary');
+        setUploadProgress(0);
       };
 
       xhr.send(formData);
